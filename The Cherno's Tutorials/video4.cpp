@@ -18,7 +18,6 @@ int main()
 	glfwMakeContextCurrent(my_Window);
 
 	if(glewInit() != GLEW_OK){ std::cout << "Error!" << std::endl; return -1;  }
-	std::cout << glGetString(GL_VERSION) << std::endl;
 
 	float positions[] = {
 		-0.5f, -0.5f,
@@ -26,10 +25,13 @@ int main()
 		 0.5f, -0.5f
 	};
 
-	unsigned int my_Buffer;
-	glGenBuffers(1, &my_Buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, my_Buffer);
+	unsigned int my_BufferIdx;
+	glGenBuffers(1, &my_BufferIdx);
+	glBindBuffer(GL_ARRAY_BUFFER, my_BufferIdx);
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
+	glEnableVertexAttribArray(0);
 
 	// Loop until the user closes the window
 	while(!glfwWindowShouldClose(my_Window)){	
