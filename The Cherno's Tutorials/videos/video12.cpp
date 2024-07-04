@@ -7,13 +7,12 @@
 #include <sstream>
 #include <cassert>
 
-
 struct shaderProgramSource{
 	std::string shaderVertexSource;
 	std::string shaderFragmentSource;
 };
 
-// Farse file into different shader strings.
+// Parse file into different shader strings.
 static shaderProgramSource parse_file(const std::string&);
 
 // Compile Shader Method
@@ -52,6 +51,10 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, my_BufferIdx);
 	glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), positions, GL_STATIC_DRAW);
 
+	unsigned int my_VaoIdx;	//V.A.O. = Vertex Array Object
+	glGenVertexArrays(1, &my_VaoIdx);
+	glBindVertexArray(my_VaoIdx);
+
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0,
@@ -66,11 +69,17 @@ int main()
 	glEnableVertexAttribArray(0);
 
 
-	shaderProgramSource shader_Source = parse_file("res/shaders/basic.shader");
+	shaderProgramSource shader_Source = parse_file("../res/shaders/basic.shader");
 
 	unsigned int my_Shader = create_shader(shader_Source.shaderVertexSource, shader_Source.shaderFragmentSource);
 	glUseProgram(my_Shader);
 
+
+	// Unbinding shit
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glUseProgram(0);
 
 	// Get an unsigned int for the uniform in the same way as we get Buffer Ids or shader Ids.
 	int location = glGetUniformLocation(my_Shader, "u_Colour");
@@ -78,9 +87,16 @@ int main()
 	float r = 0.0f, increment = 0.01f;
 
 	// Loop until the user closes the window
-	while(!glfwWindowShouldClose(my_Window)){	
+	while(!glfwWindowShouldClose(my_Window)){
 		//Render here
 		glClear(GL_COLOR_BUFFER_BIT);
+
+
+		//Rebinding everything here
+		glUseProgram(my_Shader);
+		glBindVertexArray(my_VaoIdx);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IboIdx);
+
 
 		// We send need to send 4 floats to vec4
 		glUniform4f(location, r, 0.3f, 0.8f, 1.0f);

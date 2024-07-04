@@ -29,7 +29,7 @@ int main()
 	if(!glfwInit()){ return -1; }
 
 	//Create a Windowed mode Window and its OpenGL Context
-	my_Window = glfwCreateWindow(640, 640, "Video 9: Index Buffers", NULL, NULL);
+	my_Window = glfwCreateWindow(640, 480, "Video 8: Shader Abstraction", NULL, NULL);
 	if(!my_Window){ glfwTerminate(); return -1; }
 
    	// Make the window's context current
@@ -38,32 +38,21 @@ int main()
 	if(glewInit() != GLEW_OK){ std::cout << "Error!" << std::endl; return -1;  }
 
 	float positions[] = {
-		-0.5f, -0.5f,	//0
-		 0.5f, -0.5f,	//1
-		 0.5f,  0.5f,	//2
-		-0.5f,  0.5f	//3
+		-0.5f, -0.5f,
+		 0.0f,  0.5f,
+		 0.5f, -0.5f
 	};
 
 	unsigned int my_BufferIdx;
 	glGenBuffers(1, &my_BufferIdx);
 	glBindBuffer(GL_ARRAY_BUFFER, my_BufferIdx);
-	glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), positions, GL_STATIC_DRAW);
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0,
-	};
-
-	unsigned int my_IboIdx;	//Ibo = Index Buffer Object
-	glGenBuffers(1, &my_IboIdx);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IboIdx);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
 	glEnableVertexAttribArray(0);
 
-
-	shaderProgramSource shader_Source = parse_file("res/shaders/basic.shader");
+	//TODO: Add correct shaders to the method.
+	shaderProgramSource shader_Source = parse_file("../res/shaders/basic.shader");
 
 	unsigned int my_Shader = create_shader(shader_Source.shaderVertexSource, shader_Source.shaderFragmentSource);
 	glUseProgram(my_Shader);
@@ -73,7 +62,7 @@ int main()
 		//Render here
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
         	// Swap front and back buffers
         	glfwSwapBuffers(my_Window);

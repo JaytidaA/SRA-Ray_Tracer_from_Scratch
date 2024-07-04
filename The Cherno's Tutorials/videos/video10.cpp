@@ -76,7 +76,7 @@ int main()
 	glEnableVertexAttribArray(0);
 
 
-	shaderProgramSource shader_Source = parse_file("res/shaders/basic.shader");
+	shaderProgramSource shader_Source = parse_file("../res/shaders/basic.shader");
 
 	unsigned int my_Shader = create_shader(shader_Source.shaderVertexSource, shader_Source.shaderFragmentSource);
 	glUseProgram(my_Shader);
