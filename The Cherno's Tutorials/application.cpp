@@ -2,92 +2,14 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <sstream>
+#include <cassert>
 
 #include "Renderer.hpp"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-
-struct shaderProgramSource{
-	std::string shaderVertexSource;
-	std::string shaderFragmentSource;
-};
-
-// Farse file into different shader strings.
-static shaderProgramSource parse_file(const std::string & filepath){
-	enum class shader_Type{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
-
-	std::ifstream stream(filepath);
-	std::string line;
-	std::stringstream ss[2];
-	shader_Type type = shader_Type::NONE;
-
-	while(getline(stream, line)){
-		if(line.find("# Shader") != std::string::npos){
-			if(line.find("Vertex") != std::string::npos){
-				type = shader_Type::VERTEX;
-			}
-			else if(line.find("Fragment") != std::string::npos){
-				type = shader_Type::FRAGMENT;
-			}
-		}
-		else{
-			ss[(int)type] << line << "\n";
-		}
-	}
-
-	stream.close();
-	return {ss[0].str(), ss[1].str()};
-}
-
-// Compile Shader Method
-static unsigned int compile_shader(unsigned int type, const std::string & source){
-	unsigned int id = glCreateShader(type);
-
-	//Get a C-Style String as the method to compile a Shader becomes easier.
-	//Otherwise have the length of each string ready.
-	const char * src = &source[0];
-	glShaderSource(id, 1, &src, nullptr);
-	glCompileShader(id);
-
-	//Error Handling code
-	int result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if(result == GL_FALSE){
-		int length;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-		char * message = (char *) alloca(length * sizeof(char));
-		glGetShaderInfoLog(id, length, &length, message);
-
-		std::cout << "Failed to compile " << ((type == GL_VERTEX_SHADER)?"vertex":"fragment") << " shader: " << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(id);
-		return 0;
-	}
-
-	return id;
-}
-
-// Create Shader method
-static unsigned int create_shader(const std::string & vtx_Shader, const std::string & frg_Shader){
-	unsigned int program = glCreateProgram();
-	unsigned int vs = compile_shader(GL_VERTEX_SHADER, vtx_Shader);
-	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, frg_Shader);
-
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	glValidateProgram(program);
-
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-
-	return program;
-}
+#include "VertexArray.hpp"
+#include "Shader.hpp"
 
 int main()
 {
@@ -97,7 +19,7 @@ int main()
 	if(!glfwInit()){ return -1; }
 
 	//Create a Windowed mode Window and its OpenGL Context
-	my_Window = glfwCreateWindow(640, 640, "Video 11: OpenGL Uniforms", NULL, NULL);
+	my_Window = glfwCreateWindow(640, 640, "Abstraction of Elements", NULL, NULL);
 	if(!my_Window){ glfwTerminate(); return -1; }
 
    	// Make the window's context current
@@ -115,11 +37,13 @@ int main()
 		-0.5f,  0.5f	//3
 		};
 
+		vertex_Array va;
 		vertex_Buffer vb(positions, 4 * 2 * sizeof(float));
 
-		unsigned int my_VaoIdx;	//V.A.O. = Vertex Array Object
-		glGenVertexArrays(1, &my_VaoIdx);
-		glBindVertexArray(my_VaoIdx);
+		vertex_Buffer_Layout layout;
+		layout.push<float>(2);
+
+		va.add_buffer(vb, layout);
 
 		unsigned int indices[] = {
 			0, 1, 2,
@@ -128,42 +52,35 @@ int main()
 
 		index_Buffer ibo(indices, 6); //Ibo = Index Buffer Object
 
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (const void*)0);
-		glEnableVertexAttribArray(0);
-
-
-		shaderProgramSource shader_Source = parse_file("res/shaders/basic.shader");
-
-		unsigned int my_Shader = create_shader(shader_Source.shaderVertexSource, shader_Source.shaderFragmentSource);
-		glUseProgram(my_Shader);
+		shader sh("res/shaders/basic.shader");
+		sh.bind();
 
 
 		// Unbinding shit
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glUseProgram(0);
+		va.unbind();
+		vb.unbind();
+		ibo.unbind();
+		sh.unbind();
 
 		// Get an unsigned int for the uniform in the same way as we get Buffer Ids or shader Ids.
-		int location = glGetUniformLocation(my_Shader, "u_Colour");
-		assert((location != -1));
+		// This comment is no longer valid as I am now using a class system
+		sh.set_uniform_4f("u_Colour", 0.8f, 0.3f, 0.8f, 1.0f);
 		float r = 0.0f, increment = 0.01f;
 
 		// Loop until the user closes the window
 		while(!glfwWindowShouldClose(my_Window)){
 			//Render here
-			glClear(GL_COLOR_BUFFER_BIT);
+			GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
 
 			//Rebinding everything here
-			glUseProgram(my_Shader);
-			glBindVertexArray(my_VaoIdx);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IboIdx);
-
+			sh.bind();
+			va.bind();
+			ibo.bind();
 
 			// We send need to send 4 floats to vec4
-			glUniform4f(location, r, 0.3f, 0.8f, 1.0f);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+			sh.set_uniform_4f("u_Colour", r, 0.3f, 0.8f, 1.0f);
+			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
 			if(r > 1.0f) increment = -0.001f;
 			else if(r < 0.0f) increment = 0.001f;
@@ -176,7 +93,6 @@ int main()
         	// Poll for and process events
         	glfwPollEvents();
 		}
-		glDeleteProgram(my_Shader);
 	}
 
 	glfwTerminate();
