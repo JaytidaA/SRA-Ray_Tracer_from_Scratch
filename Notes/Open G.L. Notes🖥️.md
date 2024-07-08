@@ -154,3 +154,54 @@ Two methods
 
 1. `glDebugMessageCallback():
    This is a new function introduced in `gl4.3` so many developers do not use this function to ensure backward compatibility.
+
+# Vertex Arrays
+Vertex Arrays are an `OpenGL` special. These are used to relate a Layout with a Vertex Buffer. In the Compatibility mode of `OpenGL`, a default Vertex Array has been provided with the Array being represented by the index `0`. When we use the method `glVertexAttribPointer()` we are actually operating on the default Vertex Array to store this layout. We can define them as separate variables as well using the same method we use to define Vertex Buffers and Index Buffers.
+
+# A.P.I. Usage
+```mermaid
+classDiagram
+
+VertexBufferElement_struct --* VertexBufferLayout
+ShaderProgramSource_struct --* Shader
+IndexBuffer ..> VertexBuffer
+VertexArray o-- VertexBuffer
+VertexBufferLayout --> VertexArray
+Shader <--> VertexBuffer
+Shader <.. IndexBuffer
+
+VertexBuffer: my_RendererID
+VertexBuffer: bind()
+VertexBuffer: unbind()
+
+IndexBuffer: my_RendererID
+IndexBuffer: my_Count
+IndexBuffer: get_count()
+IndexBuffer: bind()
+IndexBuffer: unbind()
+
+VertexArray: my_RendererID
+VertexArray: add_buffer()
+VertexArray: bind()
+VertexArray: unbind()
+
+VertexBufferLayout: my_Elements
+VertexBufferLayout: my_Stride
+VertexBufferLayout: push()
+VertexBufferLayout: get_elements()
+VertexBufferLayout: get_stride()
+
+VertexBufferElement_struct: type
+VertexBufferElement_struct: count
+VertexBufferElement_struct: normalised
+
+Shader: my_RendererID
+Shader: my_Filepath
+Shader: bind()
+Shader: unbind()
+Shader: set_uniform_4f()
+
+ShaderProgramSource_struct: shader_Vertex_Source
+ShaderProgramSource_struct: shader_Fragment_Source
+```
+
