@@ -102,7 +102,7 @@ Fragment-Shader --> Graphics;
 Many a times we have to render shapes which are more complex than a Triangle(e.g. a quadrilateral), but the basic primitive for Image rendering are always triangles so we **have** to somehow use triangles to create a quadrilateral.
 
 The easiest way to do this is to make use of two triangles to form a quadrilateral as follows:
-![quadrilateral](quadrilateral_using_triangles.png)
+![quadrilateral](./Images/quadrilateral_using_triangles.png)
 To draw this quadrilateral, we may specify the vertex array as:
 ```cpp
 Vertex vtx_Array1[3] = {A, B, C};
