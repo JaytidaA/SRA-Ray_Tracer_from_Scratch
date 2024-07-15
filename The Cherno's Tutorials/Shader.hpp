@@ -2,6 +2,9 @@
 #define SHADER_HPP
 
 #include <string>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 struct shaderProgramSource{
 	std::string shaderVertexSource;
@@ -22,6 +25,7 @@ class shader{
 
     // Set Uniform
     void set_uniform_4f(const std::string &, float, float, float, float);
+    void set_uniform_mat_4f(const std::string &, const glm::mat4 ,bool);
 
     private:
     shaderProgramSource parse_file(const std::string &);

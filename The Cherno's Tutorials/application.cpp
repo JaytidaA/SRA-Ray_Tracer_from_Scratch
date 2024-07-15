@@ -33,49 +33,64 @@ int main()
 
 	if(glewInit() != GLEW_OK){ std::cout << "Error!" << std::endl; return -1;  }
 
-    float positions[] = {
-        0.0f,  0.0f,  0.5f,
-        1.0f,  1.0f, -0.5f,
-       -1.0f,  1.0f, -0.5f,
-       -1.0f, -1.0f, -0.5f,
-        1.0f, -1.0f, -0.5f,
-    };
+    {
+        
+        float positions[] = {
+            0.0f,  0.0f,  0.5f,
+            1.0f,  1.0f, -0.5f,
+           -1.0f,  1.0f, -0.5f,
+           -1.0f, -1.0f, -0.5f,
+            1.0f, -1.0f, -0.5f,
+        };
 
-    unsigned int indices[] = {
-        0, 1, 2,
-        0, 2, 3,
-        0, 3, 4,
-        0, 4, 1,
-        1, 2, 3,
-        2, 3, 4
-    };
+        unsigned int indices[] = {
+            0, 1, 2,
+            0, 2, 3,
+            0, 3, 4,
+            0, 4, 1,
+            1, 2, 3,
+            2, 3, 4
+        };
 
-    vertex_Buffer vb1(positions, 5 * 3 * sizeof(float));
-    index_Buffer ibo1(indices, 6 * 3);
+        vertex_Buffer vb1(positions, 5 * 3 * sizeof(float));
+        index_Buffer ibo1(indices, 6 * 3);
 
-    vertex_Buffer_Layout vbl1;
-    vbl1.push<float>(3);
+        vertex_Buffer_Layout vbl1;
+        vbl1.push<float>(3);
 
-    vertex_Array va1;
-    va1.add_buffer(vb1, vbl1);
+        vertex_Array va1;
+        va1.add_buffer(vb1, vbl1);
 
-    shader sh1("res/shaders/basic.shader");
-    sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
-
-    while(!glfwWindowShouldClose(my_Window)){
-		//Render here
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
+        shader sh1("res/shaders/notsobasic.shader");
         sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
-		GLCall(glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, nullptr));
 
-        // Do something here
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.5f, -5.0f));
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 640.0f / 640.0f, 0.1f, 100.0f);
 
-    	// Swap front and back buffers
-        glfwSwapBuffers(my_Window);
+        sh1.set_uniform_mat_4f("u_Model", model, false);
+        sh1.set_uniform_mat_4f("u_View", view, false);
+        sh1.set_uniform_mat_4f("u_Projection", projection, false);
 
-    	// Poll for and process events
-        glfwPollEvents();
+        while(!glfwWindowShouldClose(my_Window)){
+		    //Render here
+	    	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+
+            sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
+            sh1.set_uniform_mat_4f("u_Model", model, false);
+            sh1.set_uniform_mat_4f("u_View", view, false);
+            sh1.set_uniform_mat_4f("u_Projection", projection, false);
+		    GLCall(glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, nullptr));
+
+            // Do something here
+
+        	// Swap front and back buffers
+            glfwSwapBuffers(my_Window);
+
+    	    // Poll for and process events
+            glfwPollEvents();
+       }
+
     }
 
     glfwTerminate();
