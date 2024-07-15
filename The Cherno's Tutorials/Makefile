@@ -13,7 +13,7 @@ libLINKS2 := glfw3 X11
 # Linker Flags
 # "fyle" is used because "file" has another meaning in Makefiles
 fgINCLLINKER := $(foreach path, $(INCLUDE), -I$(path)) \
-            $(foreach path, $(LIBRARY), -L$(path))
+            	$(foreach path, $(LIBRARY), -L$(path))
 
 libLINKER1 := $(foreach fyle, $(libLINKS1), -l$(fyle))
 libLINKER2 := $(foreach fyle, $(libLINKS2), -l$(fyle))

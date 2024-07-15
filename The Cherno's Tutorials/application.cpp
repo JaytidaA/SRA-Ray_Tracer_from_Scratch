@@ -1,6 +1,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include <iostream>
 #include <string>
 #include <cassert>
@@ -29,72 +33,51 @@ int main()
 
 	if(glewInit() != GLEW_OK){ std::cout << "Error!" << std::endl; return -1;  }
 
-	{
-		float positions[] = {
-		-0.5f, -0.5f,	//0
-		 0.5f, -0.5f,	//1
-		 0.5f,  0.5f,	//2
-		-0.5f,  0.5f	//3
-		};
+    float positions[] = {
+        0.0f,  0.0f,  0.5f,
+        1.0f,  1.0f, -0.5f,
+       -1.0f,  1.0f, -0.5f,
+       -1.0f, -1.0f, -0.5f,
+        1.0f, -1.0f, -0.5f,
+    };
 
-		vertex_Array va;
-		vertex_Buffer vb(positions, 4 * 2 * sizeof(float));
+    unsigned int indices[] = {
+        0, 1, 2,
+        0, 2, 3,
+        0, 3, 4,
+        0, 4, 1,
+        1, 2, 3,
+        2, 3, 4
+    };
 
-		vertex_Buffer_Layout layout;
-		layout.push<float>(2);
+    vertex_Buffer vb1(positions, 5 * 3 * sizeof(float));
+    index_Buffer ibo1(indices, 6 * 3);
 
-		va.add_buffer(vb, layout);
+    vertex_Buffer_Layout vbl1;
+    vbl1.push<float>(3);
 
-		unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0,
-		};
+    vertex_Array va1;
+    va1.add_buffer(vb1, vbl1);
 
-		index_Buffer ibo(indices, 6); //Ibo = Index Buffer Object
+    shader sh1("res/shaders/basic.shader");
+    sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
 
-		shader sh("res/shaders/basic.shader");
-		sh.bind();
+    while(!glfwWindowShouldClose(my_Window)){
+		//Render here
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+        sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
+		GLCall(glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, nullptr));
 
-		// Unbinding shit
-		va.unbind();
-		vb.unbind();
-		ibo.unbind();
-		sh.unbind();
+        // Do something here
 
-		// Get an unsigned int for the uniform in the same way as we get Buffer Ids or shader Ids.
-		// This comment is no longer valid as I am now using a class system
-		sh.set_uniform_4f("u_Colour", 0.8f, 0.3f, 0.8f, 1.0f);
-		float r = 0.0f, increment = 0.01f;
+    	// Swap front and back buffers
+        glfwSwapBuffers(my_Window);
 
-		// Loop until the user closes the window
-		while(!glfwWindowShouldClose(my_Window)){
-			//Render here
-			GLCall(glClear(GL_COLOR_BUFFER_BIT));
+    	// Poll for and process events
+        glfwPollEvents();
+    }
 
-
-			//Rebinding everything here
-			sh.bind();
-			va.bind();
-			ibo.bind();
-
-			// We send need to send 4 floats to vec4
-			sh.set_uniform_4f("u_Colour", r, 0.3f, 0.8f, 1.0f);
-			GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-
-			if(r > 1.0f) increment = -0.001f;
-			else if(r < 0.0f) increment = 0.001f;
-
-			r += increment;
-
-        	// Swap front and back buffers
-        	glfwSwapBuffers(my_Window);
-
-        	// Poll for and process events
-        	glfwPollEvents();
-		}
-	}
-
-	glfwTerminate();
+    glfwTerminate();
 	return 0;
 }
