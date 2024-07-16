@@ -64,8 +64,12 @@ int main()
         shader sh1("res/shaders/notsobasic.shader");
         sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
 
+        glm::vec3 camPos_Vector = glm::vec3(0.0f, 0.0f, 3.0f);
+        glm::vec3 target_Vector = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 up_Vector = glm::vec3(0.0f, 1.0f, 0.0f);
+
         glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.5f, -5.0f));
+        glm::mat4 view = glm::lookAt(camPos_Vector, target_Vector, up_Vector);
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 640.0f / 640.0f, 0.1f, 100.0f);
 
         sh1.set_uniform_mat_4f("u_Model", model, false);

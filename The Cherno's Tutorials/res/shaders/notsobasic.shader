@@ -20,4 +20,3 @@ uniform vec4 u_Colour;
 void main(){
 	colour = u_Colour;
 }
-

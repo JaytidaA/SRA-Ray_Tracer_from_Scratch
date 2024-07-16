@@ -37,7 +37,7 @@ void shader::set_uniform_mat_4f(const std::string & name, const glm::mat4 matrix
 }
 
 int shader::get_uniform_location(const std::string & name){
-    int location;
+    int location = -1;
 	GLCall(location = glGetUniformLocation(my_RendererID, name.c_str()));
 	if(location == -1)
         std::cout << "Warning: Uniform " <<  name << "does not exist!" << std::endl;
@@ -105,13 +105,13 @@ unsigned int shader::create_shader(const std::string & vtx_Shader, const std::st
 	unsigned int vs = compile_shader(GL_VERTEX_SHADER, vtx_Shader);
 	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, frg_Shader);
 
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	glValidateProgram(program);
+	GLCall(glAttachShader(program, vs));
+	GLCall(glAttachShader(program, fs));
+	GLCall(glLinkProgram(program));
+	GLCall(glValidateProgram(program));
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	GLCall(glDeleteShader(vs));
+	GLCall(glDeleteShader(fs));
 
 	return program;
 }
