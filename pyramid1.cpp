@@ -15,7 +15,7 @@ GLfloat vertices[] = {
      0.0f, 1.0f, 0.0f,  1.0f, 0.5f, 0.5f, // Apex vertex (Pink)
 };
 
-GLuint indices[] = {
+unsigned int indices[] = {
     // Base
     0, 1, 2,
     0, 2, 3,
@@ -26,9 +26,8 @@ GLuint indices[] = {
     2, 3, 4,
     3, 0, 4,
 };
-
-GLuint VAO, VBO, EBO;
-GLuint shaderProgram;
+unsigned int VAO, VBO, EBO;
+unsigned int shaderProgram;
 
 const char* vertexShaderSource = R"(
 #version 330 core
