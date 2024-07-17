@@ -62,6 +62,7 @@ int main()
         va1.add_buffer(vb1, vbl1);
 
         shader sh1("res/shaders/notsobasic.shader");
+        sh1.bind();
         sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
 
         glm::vec3 camPos_Vector = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -80,6 +81,7 @@ int main()
 		    //Render here
 	    	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
+            sh1.bind();
             sh1.set_uniform_4f("u_Colour", 1.0f, 1.0f, 0.0f, 0.7f);
             sh1.set_uniform_mat_4f("u_Model", model, false);
             sh1.set_uniform_mat_4f("u_View", view, false);
