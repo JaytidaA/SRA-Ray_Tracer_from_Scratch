@@ -5,6 +5,15 @@ double & vec4::operator[](int i){
     return my_Elem[i];
 }
 
+vec4 vec4::operator-(){
+    return vec4(
+        -my_Elem[0],
+        -my_Elem[1],
+        -my_Elem[2],
+        -my_Elem[3]
+    );
+}
+
 vec4 vec4::operator+(vec4 opd2){
     return vec4(
         my_Elem[0] + opd2.x(),

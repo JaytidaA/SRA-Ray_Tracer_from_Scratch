@@ -22,21 +22,24 @@ class vec4{
     double & operator[](int);
 
     public:
-    //Vector Arithmetic
+    // Unary Minus
+    vec4 operator-();
+
+    // Vector Arithmetic
     vec4 operator+(vec4);
     vec4 operator-(vec4);
 
-    //Shorthand Vector Arithmetic
+    // Shorthand Vector Arithmetic
     void operator+=(vec4);
     void operator-=(vec4);
 
-    //Scalar Arithmetic
+    // Scalar Arithmetic
     vec4 operator+(double);
     vec4 operator-(double);
     vec4 operator*(double);
     vec4 operator/(double);
 
-    //Shorthand Scalar Arithmetic
+    // Shorthand Scalar Arithmetic
     void operator+=(double);
     void operator-=(double);
     void operator*=(double);
