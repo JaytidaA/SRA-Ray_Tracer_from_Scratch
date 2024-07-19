@@ -1,7 +1,8 @@
 #include "../include/Vec4.hpp"
+#include <cassert>
 
 double & vec4::operator[](int i){
-    static_assert(0 <= i <= 4, "Accessing non-existent element");
+    assert(0 <= i <= 4);
     return my_Elem[i];
 }
 
@@ -115,4 +116,9 @@ void vec4::operator/= (double scalar){
     my_Elem[1] /= scalar;
     my_Elem[2] /= scalar;
     my_Elem[3] /= scalar;
+}
+
+std::ostream& operator<<(std::ostream & out_Stream, const vec4 & vec){
+    out_Stream << vec.x() << " " << vec.y() << " " << vec.z();
+    return out_Stream;
 }

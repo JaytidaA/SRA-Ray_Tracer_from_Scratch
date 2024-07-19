@@ -2,6 +2,7 @@
 #define VEC4_HPP
 
 #include <array>
+#include <ostream>
 
 class vec4{
     private:
@@ -44,6 +45,10 @@ class vec4{
     void operator-=(double);
     void operator*=(double);
     void operator/=(double);
+
+    public:
+    // Printing out for PPM.
+    friend std::ostream& operator<<(std::ostream &, const vec4 &);
 };
 
 #endif //VEC4_HPP
