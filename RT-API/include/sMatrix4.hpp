@@ -21,8 +21,8 @@ class smatrix4{
     }
 
     // Matrix made from 4 vectors
-    smatrix(std::array<vec4, 4> entries): my_Elem(entries){}
-    smatrix(vec4 en0, vec4 en1, vec4 en2, vec4 en3): my_Elem({en0, en1, en2, en3}){}
+    smatrix4(std::array<vec4, 4> entries): my_Elem(entries){}
+    smatrix4(vec4 en0, vec4 en1, vec4 en2, vec4 en3): my_Elem({en0, en1, en2, en3}){}
 
     public:
     // Vector Access

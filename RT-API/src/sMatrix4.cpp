@@ -1,7 +1,8 @@
-#include "../include/sMatrix.hpp"
+#include "../include/sMatrix4.hpp"
+#include <cassert>
 
-vec4 & smatrix::operator[](int i){
-    static_assert(0 <= i <= 4, "Accessing non-existent element");
+vec4 & smatrix4::operator[](int i){
+    assert(0 <= i <= 4);
     return my_Elem[i];
 }
 
@@ -20,6 +21,6 @@ smatrix4 smatrix4::operator*(smatrix4 opd2){
     vec4 col2 = *(this) * opd2.c2();
     vec4 col3 = *(this) * opd2.c3();
 
-    smatrix res_Mat(col0, col1, col2, col3);
+    smatrix4 res_Mat(col0, col1, col2, col3);
     return res_Mat;
 }
