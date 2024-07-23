@@ -128,7 +128,16 @@ void vec4::operator/= (double scalar){
     my_Elem[3] /= scalar;
 }
 
-std::ostream& operator<<(std::ostream & out_Stream, const vec4 & vec){
-    out_Stream << vec.x() << " " << vec.y() << " " << vec.z();
-    return out_Stream;
+void print3(std::ostream & os, const vec4 & vec){
+    os << vec.my_Elem[0] << " " << vec.my_Elem[1] << " " << vec.my_Elem[2];
+}
+
+void print3colour(std::ostream & os, const vec4 & vec, int maxint){
+    double multiplier = (double)maxint - 0.01;
+    int carr[] = {
+        int(multiplier * vec.my_Elem[0]),
+        int(multiplier * vec.my_Elem[1]),
+        int(multiplier * vec.my_Elem[2])
+    };
+    os << carr[0] << " " << carr[1] << " " << carr[2];
 }

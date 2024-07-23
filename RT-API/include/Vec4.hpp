@@ -52,16 +52,12 @@ class vec4{
     void operator/=(double);
 
     public:
-    // Printing out for PPM.
-    friend std::ostream& operator<<(std::ostream &, const vec4 &);
-
-    public:
     // Length in 3 dimensions
     double length3() const{
         return std::sqrt(
             my_Elem[0] * my_Elem[0] +
             my_Elem[1] * my_Elem[1] +
-            my_Elem[2] * my_Elem[2] +
+            my_Elem[2] * my_Elem[2]
         );
     }
 
@@ -74,6 +70,12 @@ class vec4{
             my_Elem[3] * my_Elem[3]
         );
     }
+
+    // Print the first 3 elements
+    friend void print3(std::ostream &, const vec4 &);
+
+    // Print the first 3 elements as colours
+    friend void print3colour(std::ostream &, const vec4 &, int);
 };
 
 #endif //VEC4_HPP

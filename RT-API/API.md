@@ -16,8 +16,10 @@ The class makes use of a `std::array` to hold the elements of the vector which a
 8. `cross3()`: Takes in two `vec4` vectors and returns their 3 dimensional cross product.
 9. `length3()`: Returns the length from the origin to that point in 3 dimensional space. $\left(\sqrt{x^2 + y^2 + z^2}\right)$
 10. `euclidean_norm()`: Returns $||\mathbf{v}|| = \sqrt{x^2 + y^2 + z^2 + w^2}$.
+11. `print3()`: Friend function that prints the first three elements of the vector.
+12. `print3colour()`: Assumes that the elements are in the range [0, 1] and makes prints them out as suitable for a PPM format with a speciifed intensity.
 
-# sMatrix4.hpp
+# SqMatrix4.hpp
 
 This file contains the `smatrix4` class which is used for applying Linear Transformations on the `vec4` class.
 
