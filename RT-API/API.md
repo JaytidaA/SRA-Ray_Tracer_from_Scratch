@@ -12,6 +12,10 @@ The class makes use of a `std::array` to hold the elements of the vector which a
 4. `operator +(-)`: Overloaded functions which returns a `vec4` which contains the element-wise sums(differences) if another `vec4` has been passed to it. Returns a `vec4` where each element has been incremented(decremented) by the provided scalar.
 5. `operator *(/)`: Returns a `vec4` scaled by the (reciprocal of the) specified scalar.
 6. `operator`x`=`: Shorthand assignment implementations of all the arithmetic operations discussed above. (x := `+, -, *, /`)
+7. `dot3()`: Takes in two `vec4` vectors and returns their 3 dimensional dot product.
+8. `cross3()`: Takes in two `vec4` vectors and returns their 3 dimensional cross product.
+9. `length3()`: Returns the length from the origin to that point in 3 dimensional space. $\left(\sqrt{x^2 + y^2 + z^2}\right)$
+10. `euclidean_norm()`: Returns $||\mathbf{v}|| = \sqrt{x^2 + y^2 + z^2 + w^2}$.
 
 # sMatrix4.hpp
 

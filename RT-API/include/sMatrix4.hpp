@@ -35,8 +35,8 @@ class smatrix4{
 
     public:
     // Matrix Multiplication
-    vec4 operator*(vec4);
-    smatrix4 operator*(smatrix4);
+    vec4 operator*(const vec4 &);
+    smatrix4 operator*(const smatrix4 &);
 };
 
 #endif //SMATRIX4_HPP

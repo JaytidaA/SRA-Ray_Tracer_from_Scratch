@@ -6,7 +6,7 @@ vec4 & smatrix4::operator[](int i){
     return my_Elem[i];
 }
 
-vec4 smatrix4::operator*(vec4 opd2){
+vec4 smatrix4::operator*(const vec4 & opd2){
     return (
         my_Elem[0] * opd2.x() +
         my_Elem[1] * opd2.y() + 
@@ -15,7 +15,7 @@ vec4 smatrix4::operator*(vec4 opd2){
     );
 }
 
-smatrix4 smatrix4::operator*(smatrix4 opd2){
+smatrix4 smatrix4::operator*(const smatrix4 & opd2){
     vec4 col0 = *(this) * opd2.c0();
     vec4 col1 = *(this) * opd2.c1();
     vec4 col2 = *(this) * opd2.c2();

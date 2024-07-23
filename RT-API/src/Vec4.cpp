@@ -15,7 +15,7 @@ vec4 vec4::operator-(){
     );
 }
 
-vec4 vec4::operator+(vec4 opd2){
+vec4 vec4::operator+(const vec4 & opd2){
     return vec4(
         my_Elem[0] + opd2.x(),
         my_Elem[1] + opd2.y(),
@@ -24,7 +24,7 @@ vec4 vec4::operator+(vec4 opd2){
     );
 }
 
-vec4 vec4::operator-(vec4 opd2){
+vec4 vec4::operator-(const vec4 & opd2){
     return vec4(
         my_Elem[0] - opd2.x(),
         my_Elem[1] - opd2.y(),
@@ -33,14 +33,31 @@ vec4 vec4::operator-(vec4 opd2){
     );
 }
 
-void vec4::operator+=(vec4 opd2){
+double dot3(const vec4 & v1, const vec4 & v2){
+    return (
+        v1.my_Elem[0] * v2.my_Elem[0] +
+        v1.my_Elem[1] * v2.my_Elem[1] +
+        v1.my_Elem[2] * v2.my_Elem[2]
+    );
+}
+
+vec4 cross3(const vec4 & v1, const vec4 & v2){
+    return vec4(
+        v1.my_Elem[1] * v2.my_Elem[2] - v1.my_Elem[2] * v2.my_Elem[1],
+        v1.my_Elem[2] * v2.my_Elem[0] - v1.my_Elem[0] * v2.my_Elem[2],
+        v1.my_Elem[0] * v2.my_Elem[1] - v1.my_Elem[1] * v2.my_Elem[0],
+        1.0
+    );
+}
+
+void vec4::operator+=(const vec4 & opd2){
     my_Elem[0] += opd2.x();
     my_Elem[1] += opd2.y();
     my_Elem[2] += opd2.z();
     my_Elem[3] += opd2.w();
 }
 
-void vec4::operator-=(vec4 opd2){
+void vec4::operator-=(const vec4 & opd2){
     my_Elem[0] -= opd2.x();
     my_Elem[1] -= opd2.y();
     my_Elem[2] -= opd2.z();

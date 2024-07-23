@@ -3,6 +3,7 @@
 
 #include <array>
 #include <ostream>
+#include <cmath>
 
 class vec4{
     private:
@@ -27,12 +28,16 @@ class vec4{
     vec4 operator-();
 
     // Vector Arithmetic
-    vec4 operator+(vec4);
-    vec4 operator-(vec4);
+    vec4 operator+(const vec4 &);
+    vec4 operator-(const vec4 &);
+
+    // Vector-Vector Products
+    friend double dot3(const vec4 &, const vec4 &);
+    friend vec4 cross3(const vec4 &, const vec4 &);
 
     // Shorthand Vector Arithmetic
-    void operator+=(vec4);
-    void operator-=(vec4);
+    void operator+=(const vec4 &);
+    void operator-=(const vec4 &);
 
     // Scalar Arithmetic
     vec4 operator+(double);
@@ -49,6 +54,26 @@ class vec4{
     public:
     // Printing out for PPM.
     friend std::ostream& operator<<(std::ostream &, const vec4 &);
+
+    public:
+    // Length in 3 dimensions
+    double length3() const{
+        return std::sqrt(
+            my_Elem[0] * my_Elem[0] +
+            my_Elem[1] * my_Elem[1] +
+            my_Elem[2] * my_Elem[2] +
+        );
+    }
+
+    // What the name says
+    double euclidean_norm() const{
+        return std::sqrt(
+            my_Elem[0] * my_Elem[0] +
+            my_Elem[1] * my_Elem[1] +
+            my_Elem[2] * my_Elem[2] +
+            my_Elem[3] * my_Elem[3]
+        );
+    }
 };
 
 #endif //VEC4_HPP
