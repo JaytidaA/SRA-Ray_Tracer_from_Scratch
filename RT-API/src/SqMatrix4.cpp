@@ -1,4 +1,4 @@
-#include "../include/sMatrix4.hpp"
+#include "../include/SqMatrix4.hpp"
 #include <cassert>
 
 vec4 & smatrix4::operator[](int i){

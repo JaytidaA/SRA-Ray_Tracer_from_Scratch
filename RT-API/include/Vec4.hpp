@@ -61,6 +61,14 @@ class vec4{
         );
     }
 
+    double length3squared() const{
+        return (
+            my_Elem[0] * my_Elem[0] +
+            my_Elem[1] * my_Elem[1] +
+            my_Elem[2] * my_Elem[2]
+        );
+    }
+
     // What the name says
     double euclidean_norm() const{
         return std::sqrt(

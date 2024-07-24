@@ -2,15 +2,29 @@
 #include "include/Vec4.hpp"
 #include "include/Ray.hpp"
 
-vec4 ray_colour(ray r){
-    vec4 colorstart = vec4(0.5, 0.7, 1.0, 1.0);
-    vec4 colorend = vec4(1.0, 1.0, 1.0, 1.0);
-    vec4 rd = r.dir();
-    vec4 unitvec = rd / rd.length3();
-    double a = 0.5 * (unitvec.y() + 1.0);
-    // print3(std::cout, rd);
-    // std::cout << std::endl;
-    return ((colorstart * (1.0 - a)) + (colorend * a));
+bool hit_sphere(const vec4 & center, double radius, const ray & r){
+    vec4 ray_ori = r.ori();
+    vec4 ray_dir = r.dir();
+    vec4 or_c = -(ray_ori - center);
+    double a = ray_dir.length3squared();
+    double b = -2 * dot3(r.dir(), or_c);
+    double c = or_c.length3squared() - (radius * radius);
+    return (b * b >= 4.0 * a * c);
+}
+
+vec4 ray_colour(ray r, int image_height){
+    vec4 ctr = vec4(100.0, -100.0, 2.0, 1.0);
+    double rad = 10.0;
+    bool hit = hit_sphere(ctr, rad, r);
+    if(hit){ return vec4(1.0, 0.0, 0.0, 1.0); }
+
+    vec4 color_start = vec4(0.5, 0.7, 1.0, 1.0);
+    vec4 color_end = vec4(1.0, 1.0, 1.0, 1.0);
+
+    vec4 ray_dirn = r.dir();
+    double a = ((ray_dirn.y()/image_height) + 1.0);
+
+    return ((color_end * (1.0 - a)) + (color_start * a));
 }
 
 int main()
@@ -25,7 +39,7 @@ int main()
 
     // Camera Setup
     double focal_length = 1.0;
-    double viewport_height = 2.0;
+    double viewport_height = 2.25;
     double viewport_width = viewport_height * (double(image_width) / (image_height));
     vec4 camera_center = vec4(0.0, 0.0, 0.0, 1.0);
 
@@ -42,14 +56,17 @@ int main()
 
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
 
-    print3(std::cout, pixel_delta_u);
-    std::cout << std::endl;
-    print3(std::cout, pixel_delta_v);
-    std::cout << std::endl;
-    print3(std::cout, viewport_upper_left);
-    std::cout << std::endl;
-    print3(std::cout, pixel00_location);
-    std::cout << std::endl;
+    // std::cout << "Image lengths: " << image_width << " " << image_height << std::endl;
+    // std::cout << "Viewport lengths: " << viewport_width << " " << viewport_height << std::endl;
+    // std::cout << "Pixel delta u: ";
+    // print3(std::cout, pixel_delta_u);
+    // std::cout << std::endl << "Pixel delta v: ";
+    // print3(std::cout, pixel_delta_v);
+    // std::cout << std::endl << "Viewport upper left: ";
+    // print3(std::cout, viewport_upper_left);
+    // std::cout << std::endl << "Pixel 00: ";
+    // print3(std::cout, pixel00_location);
+    // std::cout << std::endl;
 
     vec4 currpixel;
 
@@ -59,10 +76,9 @@ int main()
         currpixel = pixel00_location + (pixel_delta_u * i) + (pixel_delta_v * j);
         vec4 ray_dirn = currpixel - camera_center;
         ray r = ray(camera_center, ray_dirn);
-        vec4 colour_of_current_pixel = ray_colour(r);
-        // print3(std::cout, currpixel); std::cout << std::endl;
-        // print3colour(std::cout, colour_of_current_pixel, 256);
-        // std::cout << std::endl;
+        vec4 colour_of_current_pixel = ray_colour(r, image_height);
+        print3colour(std::cout, colour_of_current_pixel, 256);
+        std::cout << std::endl;
     }}
     std::clog << "\rDone.                  \n";
 
