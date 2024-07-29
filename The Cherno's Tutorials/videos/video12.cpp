@@ -29,7 +29,7 @@ int main()
 	if(!glfwInit()){ return -1; }
 
 	//Create a Windowed mode Window and its OpenGL Context
-	my_Window = glfwCreateWindow(640, 640, "Video 11: OpenGL Uniforms", NULL, NULL);
+	my_Window = glfwCreateWindow(640, 640, "Video 12: Colour changing square", NULL, NULL);
 	if(!my_Window){ glfwTerminate(); return -1; }
 
    	// Make the window's context current
@@ -102,8 +102,8 @@ int main()
 		glUniform4f(location, r, 0.3f, 0.8f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		if(r > 1.0f) increment = -0.001f;
-		else if(r < 0.0f) increment = 0.001f;
+		if(r > 1.0f) increment = -0.01f;
+		else if(r < 0.0f) increment = 0.01f;
 
 		r += increment;
 
