@@ -7,7 +7,7 @@ bool hit_sphere(const vec4 & center, double radius, const ray & r){
     vec4 ray_dir = r.dir();
     vec4 or_c = -(ray_ori - center);
     double a = ray_dir.length3squared();
-    double b = -2 * dot3(r.dir(), or_c);
+    double b = -2 * dot3(ray_dir, or_c);
     double c = or_c.length3squared() - (radius * radius);
     return (b * b >= 4.0 * a * c);
 }

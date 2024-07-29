@@ -24,3 +24,11 @@ make <name-of-cpp-file-without-any-extensions>
 
 # Tutorial Notes
 I am trying to make a few Notes based on the knowledge I gain throughout the videos but most of the functions and constants have to be remembered through constant use and referral to the documentation for GLFW and GLEW.
+
+# RT-API
+The RT-API folder consists of an API Markdown file which explains the use of the API. The API is divided into the following folders: `include`, `src` and `bin` which contain the headers, imlpementations and the compiled binaries, respectively.
+
+To generate an image, run the following command in your terminal.
+```bash
+./imagegen.sh
+```
