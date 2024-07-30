@@ -1,8 +1,8 @@
-#ifndef SMATRIX4_HPP
-#define SMATRIX4_HPP
+#ifndef SQMATRIX4_HPP
+#define SQMATRIX4_HPP
 
-#include "Vec4.hpp"
 #include <array>
+#include "Vec4.hpp"
 
 class smatrix4{
     private:
@@ -39,4 +39,4 @@ class smatrix4{
     smatrix4 operator*(const smatrix4 &);
 };
 
-#endif //SMATRIX4_HPP
+#endif //SQMATRIX4_HPP
