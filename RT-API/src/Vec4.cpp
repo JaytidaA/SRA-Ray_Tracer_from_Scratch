@@ -2,7 +2,7 @@
 #include <cassert>
 
 double & vec4::operator[](int i){
-    assert(0 <= i <= 4);
+    assert((0 <= i) && (i <= 4));
     return my_Elem[i];
 }
 
@@ -133,11 +133,20 @@ void print3(std::ostream & os, const vec4 & vec){
 }
 
 void print3colour(std::ostream & os, const vec4 & vec, int maxint){
+    int min = 0.0, max = 1.0;
+
+    vec4 temp = vec;
+
+    for(int i = 0; i < 3; i++){
+        if(temp.my_Elem[i] < min){ temp.my_Elem[i] = min; break; }
+        if(temp.my_Elem[i] > max){ temp.my_Elem[i] = max; break; }
+    }
+
     double multiplier = (double)maxint - 0.01;
     int carr[] = {
-        int(multiplier * vec.my_Elem[0]),
-        int(multiplier * vec.my_Elem[1]),
-        int(multiplier * vec.my_Elem[2])
+        int(multiplier * temp.x()),
+        int(multiplier * temp.y()),
+        int(multiplier * temp.z())
     };
     os << carr[0] << " " << carr[1] << " " << carr[2];
 }

@@ -2,9 +2,7 @@
 #define SPHERE_HPP
 
 #include <cmath>
-#include "Vec4.hpp"
 #include "Hittable.hpp"
-#include "Interval.hpp"
 
 class sphere: public hittable{
     private:

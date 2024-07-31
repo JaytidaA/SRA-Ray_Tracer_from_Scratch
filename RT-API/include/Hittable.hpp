@@ -1,9 +1,7 @@
 #ifndef HITTABLE_HPP
 #define HITTABLE_HPP
 
-#include "Vec4.hpp"
-#include "Ray.hpp"
-#include "Interval.hpp"
+#include "SussyUtility.hpp"
 
 struct hit_record{
     vec4 hitpoint;

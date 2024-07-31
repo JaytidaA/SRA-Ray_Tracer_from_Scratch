@@ -2,7 +2,7 @@
 #include <cassert>
 
 vec4 & smatrix4::operator[](int i){
-    assert(0 <= i <= 4);
+    assert((0 <= i) && (i <= 4));
     return my_Elem[i];
 }
 
