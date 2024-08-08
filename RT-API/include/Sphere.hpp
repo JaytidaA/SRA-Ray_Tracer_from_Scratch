@@ -8,9 +8,10 @@ class sphere: public hittable{
     private:
     vec4 center;
     double radius;
+    std::shared_ptr<material> mat;
 
     public:
-    sphere(const vec4 & ctr, double rad): center(ctr), radius(std::fmax(0.0, rad)){}
+    sphere(const vec4 & ctr, double rad, std::shared_ptr<material> mat): center(ctr), radius(std::fmax(0.0, rad)), mat(mat){}
 
     bool hit(ray & r, interval ray_λ, hit_record & hr) const{
         vec4 ray_ori = r.ori();
@@ -36,6 +37,7 @@ class sphere: public hittable{
         hr.hitpoint = r.at(hr.λ);
         vec4 outward_normal = (hr.hitpoint - center) / radius;
         hr.set_face_normal(r, outward_normal);
+	hr.mat = mat;
 
         return true;
     }

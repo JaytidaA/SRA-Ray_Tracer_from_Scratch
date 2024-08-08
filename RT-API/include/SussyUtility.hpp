@@ -46,6 +46,14 @@ inline vec4 random_in_unit_sphere() {
     }
 }
 
+inline vec4 random_in_unit_disk(){
+    while (true) {
+	vec4 p = random_vector(-1,1);
+	if (p.length3squared() < 1)
+	    return p;
+    }
+}
+
 inline vec4 random_unit_vector() {
     vec4 p = random_in_unit_sphere();
     p /= p.length3();
@@ -58,6 +66,17 @@ inline vec4 random_on_hemisphere(const vec4 & normal) {
         return on_unit_sphere;
     else
         return -on_unit_sphere;
+}
+
+inline vec4 reflect(vec4 & v1, vec4 & n){
+    return (v1 - (n * (2*dot3(v1, n))));
+}
+
+inline vec4 refract(vec4 & uv, vec4 & n, double r_eta_i){
+    double cos_theta = std::fmin(dot3(-uv, n), 1.0);
+    vec4 r_out_perp = (uv + (n*cos_theta)) * r_eta_i;
+    vec4 r_out_parallel = n * -std::sqrt(std::fabs(1.0 - r_out_perp.length3squared()));
+    return r_out_perp + r_out_parallel;
 }
 
 #endif //SUSSYUTILITY_HPP

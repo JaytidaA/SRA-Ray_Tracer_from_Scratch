@@ -84,6 +84,12 @@ class vec4{
 
     // Print the first 3 elements as colours
     friend void print3colour(std::ostream &, const vec4 &, int);
+
+    // Check if the vector is near zero in all dimensions
+    bool near_zero3() const{
+	auto s = 1e-8;
+	return (std::fabs(my_Elem[0]) < s && std::fabs(my_Elem[1]) < s && std::fabs(my_Elem[2]) < s);
+    }
 };
 
 #endif //VEC4_HPP

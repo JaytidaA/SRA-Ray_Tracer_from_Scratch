@@ -128,6 +128,9 @@ void vec4::operator/= (double scalar){
     my_Elem[3] /= scalar;
 }
 
+inline double linear_to_gamma(double linear_component)
+{ return (linear_component > 0)?std::sqrt(linear_component):0; }
+
 void print3(std::ostream & os, const vec4 & vec){
     os << vec.my_Elem[0] << " " << vec.my_Elem[1] << " " << vec.my_Elem[2];
 }
@@ -140,6 +143,10 @@ void print3colour(std::ostream & os, const vec4 & vec, int maxint){
     for(int i = 0; i < 3; i++){
         if(temp.my_Elem[i] < min){ temp.my_Elem[i] = min; break; }
         if(temp.my_Elem[i] > max){ temp.my_Elem[i] = max; break; }
+    }
+
+    for(int i = 0; i < 3; i++){
+	temp.my_Elem[i] = linear_to_gamma(temp.my_Elem[i]);
     }
 
     double multiplier = (double)maxint - 0.01;

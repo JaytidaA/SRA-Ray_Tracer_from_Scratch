@@ -1,6 +1,6 @@
 # Compiler and Compiler Flags
 CC := g++
-CCFLAGS := -Wall -Wextra
+CCFLAGS := -Wall -Wextra -Wno-unused-parameter
 
 # Include Files
 HITINCLUDE := Hittable.hpp Sphere.hpp HittableList.hpp

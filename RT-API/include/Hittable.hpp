@@ -3,9 +3,12 @@
 
 #include "SussyUtility.hpp"
 
+class material;
+
 struct hit_record{
     vec4 hitpoint;
     vec4 normal;
+    std::shared_ptr<material> mat;
     double λ;
     bool out_face;
 
