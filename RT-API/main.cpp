@@ -12,7 +12,7 @@ int main()
     // World
     hittable_list world;
 
-    auto ground_material = std::make_shared<lambertian>(vec4(0.5, 0.5, 0.5, 1.0));
+    auto ground_material = std::make_shared<lambertian>(vec4(0.5, 0.5, 0.0, 1.0));
     world.add(std::make_shared<sphere>(vec4(0, -1000, 0, 1), 1000, ground_material));
 
     /*
@@ -47,15 +47,24 @@ int main()
 
     auto material1 = std::make_shared<dielectric>(1.5);
     world.add(std::make_shared<sphere>(vec4( 0,  1,  0, 1), 1.0, material1));
-    */
-
+    
     auto material2 = std::make_shared<lambertian>(vec4(0.4, 0.2, 0.1, 1.0));
     world.add(std::make_shared<sphere>(vec4(-4,  1,  0, 1), 1.0, material2));
-
-    /*
-    auto material3 = std::make_shared<metal>(vec4(0.7, 0.6, 0.5, 1.0), 0.0);
-    world.add(std::make_shared<sphere>(vec4( 4,  1,  0, 1), 1.0, material3));
     */
+        
+    auto material3 = std::make_shared<metal>(vec4(0.7, 0.6, 0.5, 1.0), 0.0);
+    world.add(std::make_shared<sphere>(vec4(-1.0, 1.0, -1.0, 1.0), 1.0, material3));
+    
+    
+    vec4 disc_ctr = vec4(1, 1, 0, 1);
+    vec4 disc_nrm = vec4(-1, 0, 0, 1);
+
+    auto material_disc_1 = std::make_shared<lambertian>(vec4(0.3, 0.0, 0.8, 1.0));
+    auto material_disc_2 = std::make_shared<metal>(vec4(1.0, 0.3, 0.7, 1.0), 0.3);
+    auto material_disc_3 = std::make_shared<dielectric>(1.5);
+    world.add(std::make_shared<plane_disc>(disc_ctr, -disc_nrm, 1, material_disc_1));
+    //world.add(std::make_shared<plane_disc>(disc_ctr + disc_nrm*2, disc_nrm, 1, material_disc_1));
+    //world.add(std::make_shared<cylinder>(disc_ctr + disc_nrm, -disc_nrm, 1, 2, material_disc_1));
 
     camera cam;
     cam.aspect_ratio      = 16.0 / 9.0;
@@ -64,19 +73,14 @@ int main()
     cam.max_depth	  = 25;
     // cam.samples_per_pixel = 1;
     // cam.sample_pixels     = false;
+
     cam.vfov 		  = 20;
-    cam.lookat		  = vec4(  0,  0, -1,  1);
-    cam.lookfrom          = vec4( 13,  2,  3,  1);
-    cam.vup               = vec4(  0,  1,  0,  1);
+    cam.lookat		  = vec4( 0,  1,  0,  1);
+    cam.lookfrom          = vec4( 10,  5,  10,  1);
+    cam.vup               = vec4( 0,  1,  0,  1);
 
     cam.defocus_angle     = 0.8;
     cam.focus_dist        = 10;
-
-    vec4 disc_center = vec4( 0,  0, -2,  1);
-    //vec4 disc_normal_help = cross3(cam.lookfrom - disc_center, cam.vup);
-    //vec4 disc_normal = cross3(cam.lookfrom - disc_center, disc_normal_help);
-    auto material3 = std::make_shared<lambertian>(vec4(1.0, 0.0, 0.0 ,1.0));
-    world.add(std::make_shared<plane_disc>(disc_center, vec4(1, 1, 1, 1), 1, material3));
 
     cam.render(world);
 
