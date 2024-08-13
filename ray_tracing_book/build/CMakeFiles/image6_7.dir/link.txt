@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/image6_7.dir/6.7.cpp.o -o image6_7 

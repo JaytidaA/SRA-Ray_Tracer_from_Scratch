@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/image4.dir/4.cpp.o -o image4 

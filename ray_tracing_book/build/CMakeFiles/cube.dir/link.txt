@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/cube.dir/cube.cpp.o -o cube 

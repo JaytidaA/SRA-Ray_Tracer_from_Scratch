@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/image14.dir/14.cpp.o -o image14 

@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/image8.dir/8.cpp.o -o image8 
