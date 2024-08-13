@@ -50,10 +50,10 @@ int main()
     
     auto material2 = std::make_shared<lambertian>(vec4(0.4, 0.2, 0.1, 1.0));
     world.add(std::make_shared<sphere>(vec4(-4,  1,  0, 1), 1.0, material2));
-    */
         
     auto material3 = std::make_shared<metal>(vec4(0.7, 0.6, 0.5, 1.0), 0.0);
     world.add(std::make_shared<sphere>(vec4(-1.0, 1.0, -1.0, 1.0), 1.0, material3));
+    */
     
     
     vec4 disc_ctr = vec4(1, 1, 0, 1);
@@ -62,9 +62,9 @@ int main()
     auto material_disc_1 = std::make_shared<lambertian>(vec4(0.3, 0.0, 0.8, 1.0));
     auto material_disc_2 = std::make_shared<metal>(vec4(1.0, 0.3, 0.7, 1.0), 0.3);
     auto material_disc_3 = std::make_shared<dielectric>(1.5);
-    world.add(std::make_shared<plane_disc>(disc_ctr, -disc_nrm, 1, material_disc_1));
-    //world.add(std::make_shared<plane_disc>(disc_ctr + disc_nrm*2, disc_nrm, 1, material_disc_1));
-    //world.add(std::make_shared<cylinder>(disc_ctr + disc_nrm, -disc_nrm, 1, 2, material_disc_1));
+    world.add(std::make_shared<plane_disc>(disc_ctr, disc_nrm, 1, material_disc_1));
+    world.add(std::make_shared<plane_disc>(disc_ctr + disc_nrm*2, disc_nrm, 1, material_disc_1));
+    world.add(std::make_shared<cylinder>(disc_ctr + disc_nrm, -disc_nrm, 1, 2, material_disc_1));
 
     camera cam;
     cam.aspect_ratio      = 16.0 / 9.0;
