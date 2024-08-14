@@ -8,7 +8,7 @@ class smat4{
 	double el[4][4];
 	// el[column-vec][row]
 
-	private:
+	public:
 	smat4(double init = 0.0){
 		for(int i = 0; i < 4; i++){
 		for(int j = 0; j < 4; j++){
