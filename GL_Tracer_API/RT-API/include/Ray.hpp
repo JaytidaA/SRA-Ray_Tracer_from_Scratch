@@ -17,6 +17,7 @@ class ray{
 	const vec4 & dir() const{ return direction; }
 
 	vec4 at(double λ) const;
+	//TODO: Implement Checking for Homogoeneous Components after Translation
 };
 
 #endif //RAY_HPP
