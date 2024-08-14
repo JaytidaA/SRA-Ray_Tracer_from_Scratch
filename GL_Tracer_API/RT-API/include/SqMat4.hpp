@@ -18,19 +18,19 @@ class smat4{
 	}
 
 	smat4(vec4 & c0, vec4 & c1, vec4 & c2, vec4 & c3){
-		for(int i = 0; i < 4; i++)}{
-			el[0][i] = *(c0[i]);
-			el[1][i] = *(c1[i]);
-			el[2][i] = *(c2[i]);
-			el[3][i] = *(c3[i]);
+		for(int i = 0; i < 4; i++){
+			el[0][i] = (c0[i]);
+			el[1][i] = (c1[i]);
+			el[2][i] = (c2[i]);
+			el[3][i] = (c3[i]);
 		}
 	}
 
 	//TODO: Implement Matrix Multiplication with a Vector
 	vec4 operator*(const vec4 &);
-	smat4 operator*(const smat &);
+	smat4 operator*(const smat4 &);
 
-	double & operator[](int);
+	double * operator[](int);
 };
 
 #endif //SQMAT4_HPP

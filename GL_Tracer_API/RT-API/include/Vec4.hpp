@@ -8,9 +8,9 @@ class vec4{
 	double el[4];
 
 	public:
-	vec4(double init = 0.0):el[0](init), el[1](init), el[2](init), el[3](init){}
-	vec4(double x, double y, double z, double w):el[0](x), el[1](y), el[2](z), el[3](w){}
-	vec4(double arr[4]): el[0](arr[0]), el[1](arr[1]), el[2](arr[2]), el[3](arr[3]){}
+	vec4(double init = 0.0):el{init, init, init, init}{}
+	vec4(double x, double y, double z, double w):el{x, y, z, w}{}
+	vec4(double arr[4]): el{arr[0], arr[1], arr[2], arr[3]}{}
 
 	friend vec4 operator* (const vec4 &, double);
 	friend vec4 operator* (double, const vec4 &);
@@ -31,7 +31,7 @@ class vec4{
 
 	double & operator[](int);
 
-	friend ostream & operator<<(ostream &, const vec4 &);
+	friend std::ostream & operator<<(std::ostream &, const vec4 &);
 };
 
 #endif //VEC4_HPP
