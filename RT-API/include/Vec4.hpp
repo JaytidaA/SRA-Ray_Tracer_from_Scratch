@@ -14,6 +14,9 @@ class vec4{
 
 	friend vec4 operator* (const vec4 &, double);
 	friend vec4 operator* (double, const vec4 &);
+	void operator*= (double);
+	vec4 operator/  (double) const;
+	void operator/= (double);
 
 	friend double dot3(const vec4 &, const vec4 &);
 	friend vec4 cross3(const vec4 &, const vec4 &);
