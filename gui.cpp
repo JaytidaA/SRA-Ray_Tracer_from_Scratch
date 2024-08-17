@@ -1,4 +1,4 @@
-#include <GL/glew.h>  // GLEW should be included before glfw
+#include <GL/glew.h>  
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -6,7 +6,7 @@
 #include <iostream>
  
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+void processInput(GLFWwindow *window, bool &showMenu, float &offsetX, float &offsetY);
  
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -17,9 +17,9 @@ const char *vertexShaderSource = "#version 330 core\n"
     "uniform vec2 offset;\n"
     "void main()\n"
     "{\n"
- 
-    "   gl_Position = vec4(size* vertices.x, size*vertices.y, size*vertices.z, 1.0);\n"
+    "   gl_Position = vec4(size * vertices.x + offset.x, size * vertices.y + offset.y, size * vertices.z, 1.0);\n"
     "}\0";
+ 
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "uniform vec4 color;\n"
@@ -27,7 +27,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "{\n"
     "   FragColor = color;\n"
     "}\n\0";
-void processInput(GLFWwindow *window, float &offsetX, float &offsetY);
+ 
 int main()
 {
     glfwInit();
@@ -118,18 +118,19 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
  
     bool drawTriangle= true;
-    float size = 1.0f;
-    float color[4] = {0.8f,0.3f,0.02f,1.0f};
-    float offsetX = 0.0f, offsetY = 0.0f;
+    float size = 1.0f; //size variation
+    float color[4] = {0.8f,0.3f,0.02f,1.0f}; //color variation
+    float offsetX = 0.0f, offsetY = 0.0f; // for position
+    bool showMenu = false;  // to control menu visibility
+ 
     glUseProgram(shaderProgram);
     glUniform1f(glGetUniformLocation(shaderProgram,"size"),size);
     glUniform4f(glGetUniformLocation(shaderProgram,"color"), color[0],color[1],color[2],color[3]);
     glUniform2f(glGetUniformLocation(shaderProgram, "offset"), offsetX, offsetY);
  
- 
     while (!glfwWindowShouldClose(window))
     {
-        processInput(window, offsetX, offsetY);
+        processInput(window, showMenu, offsetX, offsetY);  // Pass the showMenu reference
  
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -141,27 +142,30 @@ int main()
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
  
-        if(drawTriangle)
+        if(drawTriangle) // only render triangle if drawTriangle is true
           glDrawArrays(GL_TRIANGLES, 0, 3);
  
-        ImGui::Begin("Hello, I am Rudrakshi");
-        ImGui::Text("triangle");
-        ImGui::Checkbox("draw triangle", &drawTriangle);
-        ImGui::SliderFloat("Size",&size,1.0f,5.0f);
-        ImGui::ColorEdit4("Color",color);
-        ImGui::End();
-         glUseProgram(shaderProgram);
-         glUniform1f(glGetUniformLocation(shaderProgram,"size"),size);
-         glUniform4f(glGetUniformLocation(shaderProgram,"color"), color[0],color[1],color[2],color[3]);
-         glUniform2f(glGetUniformLocation(shaderProgram, "offset"), offsetX, offsetY);
+        if (showMenu)  // Only render ImGui menu if showMenu is true
+        {
+            ImGui::Begin("Hello, I am Rudrakshi");
+            ImGui::Text("triangle");
+            ImGui::Checkbox("draw triangle", &drawTriangle);
+            ImGui::SliderFloat("Size",&size,1.0f,5.0f);
+            ImGui::ColorEdit4("Color",color);
+            ImGui::End();
+        }
+ 
+        glUseProgram(shaderProgram);
+        glUniform1f(glGetUniformLocation(shaderProgram,"size"),size);
+        glUniform4f(glGetUniformLocation(shaderProgram,"color"), color[0],color[1],color[2],color[3]);
+        glUniform2f(glGetUniformLocation(shaderProgram, "offset"), offsetX, offsetY);
+ 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
  
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
- 
- 
  
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -175,13 +179,13 @@ int main()
     return 0;
 }
  
-void processInput(GLFWwindow *window, float &offsetX, float &offsetY)
+void processInput(GLFWwindow *window, bool &showMenu, float &offsetX, float &offsetY)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
  
     const float moveSpeed = 0.01f;
- 
+    // the object will move according to the arrow keys
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         offsetY += moveSpeed;
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
@@ -190,10 +194,9 @@ void processInput(GLFWwindow *window, float &offsetX, float &offsetY)
         offsetX -= moveSpeed;
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
         offsetX += moveSpeed;
-}
  
- 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
+    if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)  // menu is visible by pressing 'M' key
+    {
+        showMenu = !showMenu;
+    }
 }
