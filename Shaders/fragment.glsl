@@ -9,12 +9,12 @@ void main()
 	dvec3 lookAt = dvec3(double(currentPixel.x), double(currentPixel.y), -focal_length);
 
 
-	uniform dvec3 sCenter;
+	//uniform dvec3 sCenter;
 
 
 	interval i = createInterval(0.0, M_INFINITY);
 	ray r = generateRay(lookFrom, lookAt-lookFrom);
-	sphere s = createSphere(sCenter, 1.0);
+	sphere s = createSphere(dvec3(0.0, 0.0, -2.0), 1.0);
 	hit_record temp;
 	if(hitSphere(temp, s, r, i)){
 		dvec3 normal = temp.normal*0.5 + 0.5;

@@ -112,6 +112,10 @@ void main()
 	vec2 currentPixel = TexCoord*2.0 - 1.0;
 	dvec3 lookAt = dvec3(double(currentPixel.x), double(currentPixel.y), -focal_length);
 
+
+	//uniform dvec3 sCenter;
+
+
 	interval i = createInterval(0.0, M_INFINITY);
 	ray r = generateRay(lookFrom, lookAt-lookFrom);
 	sphere s = createSphere(dvec3(0.0, 0.0, -2.0), 1.0);

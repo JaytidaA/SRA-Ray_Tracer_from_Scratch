@@ -86,8 +86,8 @@ int main(int argc, char ** argv){
 	ekGLCall(glUseProgram(my_Program));
 
 	double originalCenter[3] = {0.0, 0.0, -2.0};
-	ekGLCall(unsigned int sCenter = glGetUniformLocation(my_Program, "sCenter"));
-	ekGLCall(glSetUniform3dv(sCenter, 3, originalCenter));
+	//ekGLCall(unsigned int sCenter = glGetUniformLocation(my_Program, "sCenter"));
+	//ekGLCall(glSetUniform3dv(sCenter, 3, originalCenter));
 
 	// Unbinding shit
 	ekGLCall(glBindVertexArray(0));
@@ -108,7 +108,7 @@ int main(int argc, char ** argv){
 		ekGLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IndexBufferObjectIndex));
 
 		//TODO: Set the Uniform Over Here
-		ekGLCall(glSetUniform3dv(sCenter, 3, /* ARRAY OF 3 DOUBLE VALUES  */))
+		//ekGLCall(glSetUniform3dv(sCenter, 3, /* ARRAY OF 3 DOUBLE VALUES  */))
 
 		ekGLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
