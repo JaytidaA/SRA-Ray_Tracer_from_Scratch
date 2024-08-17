@@ -30,12 +30,20 @@ vec4 operator* (double scalar, const vec4 & v){
 	return vec4(scalar * v.el[0], scalar * v.el[1], scalar * v.el[2], 1.0);
 }
 
+vec4 vec4::operator*  (const vec4 & elwise){
+	return vec4(elwise.x() * el[0], elwise.y() * el[1], elwise.z() * el[2], 1.0);
+}
+
 void vec4::operator*= (double scalar){
 	el[0] *= scalar; el[1] *= scalar; el[2] *= scalar;
 }
 
 vec4 vec4::operator/  (double scalar) const{
 	return vec4(el[0]/scalar, el[1]/scalar, el[2]/scalar, 1.0);
+}
+
+vec4 vec4::operator/  (const vec4 & elwise){
+	return vec4(elwise.x() / el[0], elwise.y() / el[1], elwise.z() / el[2], 1.0);
 }
 
 void vec4::operator/= (double scalar){

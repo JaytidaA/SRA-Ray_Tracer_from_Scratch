@@ -1,5 +1,5 @@
-#ifndef SQMAT4HELPER_HPP
-#define SQMAT4HELPER_HPP
+#ifndef  SQMAT4HELPER_HPP
+#define  SQMAT4HELPER_HPP
 
 #include "SqMat4.hpp"
 

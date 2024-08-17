@@ -1,5 +1,5 @@
-#ifndef VEC4_HPP
-#define VEC4_HPP
+#ifndef  VEC4_HPP
+#define  VEC4_HPP
 
 #include <ostream>
 
@@ -14,14 +14,14 @@ class vec4{
 
 	friend vec4 operator* (const vec4 &, double);
 	friend vec4 operator* (double, const vec4 &);
+	vec4 operator*  (const vec4 &) const;		//Element Wise
 	void operator*= (double);
 	vec4 operator/  (double) const;
+	vec4 operator/  (const vec4 &) const;		//Element Wise
 	void operator/= (double);
 
 	friend double dot3(const vec4 &, const vec4 &);
 	friend vec4 cross3(const vec4 &, const vec4 &);
-
-	//TODO: Overload * opeartor from smat4
 
 	double length3() const;
 	double length3squared() const;

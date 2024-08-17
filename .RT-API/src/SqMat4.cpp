@@ -1,5 +1,6 @@
 #include "../include/SqMat4.hpp"
 
+//TODO: Implement as an OpenCL Kernel Call
 vec4 smat4::operator*(const vec4 & w){
 	vec4 v = w;
 	double result[4] = {0, 0, 0, 0};
@@ -11,6 +12,7 @@ vec4 smat4::operator*(const vec4 & w){
 	return vec4(result);
 }
 
+//TODO: Implement as an OpenCL Kernel Call
 smat4 smat4::operator*(const smat4 & smat){
 	smat4 sm = smat;
 	vec4 w[4] = {vec4(sm[0]), vec4(sm[1]), vec4(sm[2]), vec4(sm[3])};

@@ -1,5 +1,5 @@
-#ifndef RAY_HPP
-#define RAY_HPP
+#ifndef  RAY_HPP
+#define  RAY_HPP
 
 #include "Vec4.hpp"
 #include "SqMat4.hpp"

@@ -1,5 +1,5 @@
-#ifndef SQMAT4_HPP
-#define SQMAT4_HPP
+#ifndef  SQMAT4_HPP
+#define  SQMAT4_HPP
 
 #include "Vec4.hpp"
 
@@ -26,7 +26,6 @@ class smat4{
 		}
 	}
 
-	//TODO: Implement Matrix Multiplication with a Vector
 	vec4 operator*(const vec4 &);
 	smat4 operator*(const smat4 &);
 
