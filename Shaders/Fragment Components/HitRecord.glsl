@@ -1,6 +1,7 @@
 struct hit_record{
 	dvec3 hitpoint;
 	double lambda;
+	material mat;
 	dvec3 normal;
 	bool outface;
 };

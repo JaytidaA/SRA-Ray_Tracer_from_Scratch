@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <cassert>
+#include <cstdlib>
+#include <limits>
 #include <GL/glew.h>
 
 #define ekGLCall(x) \
@@ -21,6 +23,16 @@ bool ekGetGLErrors(const char * function, const char * file, int line){
 		error_flag = false;
 	}
 	return error_flag;
+}
+
+inline double ekRandomDouble(){
+	// Returns a random double in between [0, 1)
+	return std::rand()/(RAND_MAX + 1.0);
+}
+
+inline double ekRandomDouble(double min, double max) {
+	// Returns a random double in between [min, max)
+	return min + (max - min)*ekRandomDouble();
 }
 
 #endif //EK_GL_UTILS_HPP
