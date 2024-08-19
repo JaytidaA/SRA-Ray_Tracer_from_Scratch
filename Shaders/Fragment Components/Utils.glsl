@@ -1,9 +1,6 @@
 const double M_INFINITY = 1.0/0.0;
 const double M_PI       = 3.1415926535897932384626;
 
-uniform float prand[10];
-int prand_count = 0;
-
 double degrees_to_radians(double x){
 	return (x * M_PI)/180.0;
 }
@@ -28,14 +25,19 @@ bool nearzero3(dvec3 dv3){
 	return ((dv3.x < 0.0001) && (dv3.y < 0.0001) && (dv3.z < 0.0001));
 }
 
-float prand_gen_float(){
-	float ret = sin(prand[prand_count]);
-	if(ret < 0.0){ ret *= -1.0; }
-	prand_count += int(ret);
-	if(prand_count > 9){ prand_count = int(ret)%10; }
-	return ret;
+dvec2 prand_dvec2(dvec2 dv2){
+	dvec2 seed = dvec2(1.2387, 5.8645);
+	return dvec2(
+		dot(dv2, seed.xy),
+		dot(dv2, seed.yx)
+	);
 }
 
-dvec3 prand_dvec3(){
-	return dvec3(double(prand_gen_float()), double(prand_gen_float()), double(prand_gen_float()));
+dvec3 prand_dvec3(dvec3 dv3){
+	dvec3 seed = dvec3(1.23, 6.54, 8.97);
+	return dvec3(
+		dot(dv3, seed.zxy),
+		dot(dv3, seed.yzx),
+		dot(dv3, seed.xyz)
+	);
 }

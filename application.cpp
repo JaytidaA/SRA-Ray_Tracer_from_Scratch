@@ -42,9 +42,9 @@ int main(int argc, char ** argv){
 	}
 	std::cout << "Window and OpenGL context successfully created!" << std::endl;
 
-	int maxUniforms;
-	ekGLCall(glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &maxUniforms));
-	std::cout << "Maximum numer of Uniforms are: " << maxUniforms << std::endl;
+	//int maxUniforms;
+	//ekGLCall(glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &maxUniforms));
+	//std::cout << "Maximum numer of Uniforms are: " << maxUniforms << std::endl;
 
 	int width, height;
 	glfwGetFramebufferSize(my_Window, &width, &height);
@@ -89,12 +89,6 @@ int main(int argc, char ** argv){
 	unsigned int my_Program = create_shader(ps.shaderVertexSource, ps.shaderFragmentSource);
 	ekGLCall(glUseProgram(my_Program));
 
-	float randArray[10];
-	for(int i = 0; i < 10; i++){ randArray[i] = ekRandomDouble(0, i); }
-	ekGLCall(int uRandomFloats = glGetUniformLocation(my_Program, "prand"));
-	if(uRandomFloats == -1){ std::cout << "Uniform not found. Exiting\n"; return -1; }
-	ekGLCall(glUniform4fv(uRandomFloats, 10, randArray));
-
 	// Unbinding shit
 	ekGLCall(glBindVertexArray(0));
 	ekGLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
@@ -113,10 +107,6 @@ int main(int argc, char ** argv){
 		ekGLCall(glBindVertexArray(my_VertexArrayObjectIndex));
 		ekGLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IndexBufferObjectIndex));
 
-		// Set the Uniform Over Here
-		for(int i = 0; i < 10; i++){ randArray[i] = ekRandomDouble(0, i); }
-		ekGLCall(glUniform4fv(uRandomFloats, 10, randArray));
-		
 		// Give a draw call
 		ekGLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 

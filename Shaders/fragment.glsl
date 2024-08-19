@@ -2,52 +2,63 @@ out vec4 FragColor;
 in vec2 TexCoord;
 
 dvec3 ray_colour(ray r, int depth, sphere s){
-	ray scattered = generateRay(dvec3(0.0), dvec3(0.0));
-	dvec3 attenuation;
-	dvec3 ret_colour = dvec3(1.0);
 	hit_record hr;
-	bool hit_sky = false;
-	interval i = createInterval(0.0001, M_INFINITY);
-	while(depth > 0 && !(hit_sky)){
+	ray   scattered   = generateRay(dvec3(0.0), dvec3(0.0));
+	dvec3 attenuation = dvec3(0.0);
+	interval i        = createInterval(0.0001, M_INFINITY);
+	bool hit_sky      = false;
+	dvec3 retColour   = dvec3(1.0);
+
+	while(depth > 0){
 		if(hitSphere(hr, s, r, i)){
 			if(scatter(r, hr, attenuation, scattered)){
 				r = scattered;
-				ret_colour *= attenuation;
+				retColour *= attenuation;
 				depth--;
 				continue;
 			}
-			else
-			{
-				return dvec3(0.0);
-			}
+			break;
 		}
-
 		hit_sky = true;
-		dvec3 topColour = dvec3(0.5, 0.7, 1.0);
-		dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
-		double t = normalize(r.direction).y * 0.5 + 0.5;
-		ret_colour *= mix(topColour, bottomColour, t);
+		break;
 	}
 
-	if(!(hit_sky)){
-		return dvec3(0.0);
+	if(hit_sky){
+		dvec3 topColour    = dvec3(0.5, 0.7, 1.0);
+		dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
+		double t           = r.direction.y*0.5 + 0.5;
+		retColour         *= mix(topColour, bottomColour, t);
+	} else {
+		retColour = dvec3(0.0);
 	}
-	return ret_colour;
+
+	return retColour;
 }
 
 void main()
-{	
-	double focal_length = 1.0;
-	dvec3 lookFrom = dvec3(0.0, 0.0, 0.0);
-	vec2 currentPixel = TexCoord*2.0 - 1.0;
-	dvec3 lookAt = dvec3(vec2_to_dvec2(currentPixel), -focal_length);
+{
+	float focal_length = 1.0;
+	vec2 currPixel  = TexCoord*2.0 - 1.0;
+	dvec3 lookFrom  = vec3_to_dvec3(vec3( 0.0, 0.0, 0.0));
+	dvec3 lookAt    = vec3_to_dvec3(vec3(currPixel, -focal_length));
+	ray  currentRay = generateRay(lookFrom, lookAt-lookFrom);
 
+	material M0 = createMaterial(MAT_DIELECTRIC, 1/1.5);
+	sphere S0   = createSphere(dvec3(0.0, 0.0,-2.0), 0.5, M0);
 
-	//uniform dvec3 sCenter;
+	dvec3 colour = dvec3(0.0);
+	dvec2 dir[9] = dvec2[9](
+		dvec2(1,0), dvec2(1,1), dvec2(0,1), dvec2(-1, 1), dvec2(0, 0),
+		dvec2(-1,0), dvec2(-1,-1), dvec2(0,-1), dvec2(1, -1)
+	);
 
+	//for(int i = 0; i < 2; i++){
+	//	ray r = generateRay(currentRay.origin, currentRay.direction + dvec3(dir[i], 0.0)/320.0);
+	//	colour += ray_colour(r, 2, S0);
+	//}
+	//colour /= 2.0;
+	colour = ray_colour(currentRay, 2, S0);
 
-	ray r = generateRay(lookFrom, lookAt-lookFrom);
-	sphere s = createSphere(dvec3(0.0, 0.0, -2.0), 1.0, createMaterial(MAT_LAMBERTIAN, dvec3(0.2, 0.1, 0.2)));
-    FragColor = vec4(dvec3_to_vec3(ray_colour(r, 10, s)), 1.0);
+	FragColor   = vec4(dvec3_to_vec3(colour), 1.0);
+	return;
 }
-

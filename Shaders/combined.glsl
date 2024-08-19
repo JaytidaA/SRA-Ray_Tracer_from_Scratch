@@ -17,9 +17,6 @@ void main()
 const double M_INFINITY = 1.0/0.0;
 const double M_PI       = 3.1415926535897932384626;
 
-uniform float prand[10];
-int prand_count = 0;
-
 double degrees_to_radians(double x){
 	return (x * M_PI)/180.0;
 }
@@ -44,16 +41,21 @@ bool nearzero3(dvec3 dv3){
 	return ((dv3.x < 0.0001) && (dv3.y < 0.0001) && (dv3.z < 0.0001));
 }
 
-float prand_gen_float(){
-	float ret = sin(prand[prand_count]);
-	if(ret < 0.0){ ret *= -1.0; }
-	prand_count += int(ret);
-	if(prand_count > 9){ prand_count = int(ret)%10; }
-	return ret;
+dvec2 prand_dvec2(dvec2 dv2){
+	dvec2 seed = dvec2(1.2387, 5.8645);
+	return dvec2(
+		dot(dv2, seed.xy),
+		dot(dv2, seed.yx)
+	);
 }
 
-dvec3 prand_dvec3(){
-	return dvec3(double(prand_gen_float()), double(prand_gen_float()), double(prand_gen_float()));
+dvec3 prand_dvec3(dvec3 dv3){
+	dvec3 seed = dvec3(1.23, 6.54, 8.97);
+	return dvec3(
+		dot(dv3, seed.zxy),
+		dot(dv3, seed.yzx),
+		dot(dv3, seed.xyz)
+	);
 }
 
 struct ray{
@@ -161,15 +163,58 @@ void determineOuterFace(inout hit_record hr, ray r, dvec3 oN){
 	return;
 }
 
+double reflectance(double cosine, double ri){
+	// Use Schlick's Approximation for reflectance
+	double r0 = (1.0 - ri)/(1.0 + ri);
+	r0 *= r0;
+	return r0 + (1.0-r0)*double(pow(float(1-cosine), 5.0f));
+}
+
 bool scatter(const ray r_in, inout hit_record hr, inout dvec3 attenuation, inout ray scattered){
-	if((hr.mat).type == MAT_LAMBERTIAN){
-		dvec3 scattered_direction = hr.normal + normalize(prand_dvec3());
+	if(hr.mat.type == MAT_LAMBERTIAN)
+	{
+		dvec3 scattered_direction = hr.normal + normalize(prand_dvec3(hr.normal));
 		if(nearzero3(scattered_direction)){ scattered_direction = hr.normal; }
 		scattered = generateRay(hr.hitpoint, scattered_direction);
 		attenuation = (hr.mat).albedo;
 		return true;
 	}
-	else{ return false; }
+	else if(hr.mat.type == MAT_METAL)
+	{
+		if (dot(r_in.direction, hr.normal) >= 0){ return false; }
+
+		dvec3 reflected = reflect(r_in.direction, hr.normal);
+		if(hr.mat.f_or_d > 0.0){ reflected += hr.mat.f_or_d * normalize(prand_dvec3(reflected)); }
+		scattered = generateRay(hr.hitpoint, reflected);
+		attenuation = (hr.mat).albedo;
+		return true;
+	}
+	else if(hr.mat.type == MAT_DIELECTRIC)
+	{
+		attenuation = dvec3(1.0);
+		double ri   = (hr.outface)?double(1/hr.mat.f_or_d):hr.mat.f_or_d;
+
+		dvec3 unit_dirn = normalize(r_in.direction);
+		dvec3 refracted = refract(unit_dirn, hr.normal, ri);
+		double cosine   = min(dot(unit_dirn, hr.normal), 1.0);
+		double sine     = sqrt(1.0 - cosine*cosine);
+
+		bool cannot_refract = (ri * sine) > 1.0;
+		dvec3 dirn;
+
+		if(cannot_refract || reflectance(cosine, ri) > dot(dvec2(cosine, sine), unit_dirn.xy)){
+			dirn = reflect(unit_dirn, hr.normal);
+		}
+		else{
+			dirn = refracted;
+		}
+		scattered = generateRay(hr.hitpoint, dirn);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 struct sphere{
@@ -215,53 +260,64 @@ out vec4 FragColor;
 in vec2 TexCoord;
 
 dvec3 ray_colour(ray r, int depth, sphere s){
-	ray scattered = generateRay(dvec3(0.0), dvec3(0.0));
-	dvec3 attenuation;
-	dvec3 ret_colour = dvec3(1.0);
 	hit_record hr;
-	bool hit_sky = false;
-	interval i = createInterval(0.0001, M_INFINITY);
-	while(depth > 0 && !(hit_sky)){
+	ray   scattered   = generateRay(dvec3(0.0), dvec3(0.0));
+	dvec3 attenuation = dvec3(0.0);
+	interval i        = createInterval(0.0001, M_INFINITY);
+	bool hit_sky      = false;
+	dvec3 retColour   = dvec3(1.0);
+
+	while(depth > 0){
 		if(hitSphere(hr, s, r, i)){
 			if(scatter(r, hr, attenuation, scattered)){
 				r = scattered;
-				ret_colour *= attenuation;
+				retColour *= attenuation;
 				depth--;
 				continue;
 			}
-			else
-			{
-				return dvec3(0.0);
-			}
+			break;
 		}
-
 		hit_sky = true;
-		dvec3 topColour = dvec3(0.5, 0.7, 1.0);
-		dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
-		double t = normalize(r.direction).y * 0.5 + 0.5;
-		ret_colour *= mix(topColour, bottomColour, t);
+		break;
 	}
 
-	if(!(hit_sky)){
-		return dvec3(0.0);
+	if(hit_sky){
+		dvec3 topColour    = dvec3(0.5, 0.7, 1.0);
+		dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
+		double t           = r.direction.y*0.5 + 0.5;
+		retColour         *= mix(topColour, bottomColour, t);
+	} else {
+		retColour = dvec3(0.0);
 	}
-	return ret_colour;
+
+	return retColour;
 }
 
 void main()
-{	
-	double focal_length = 1.0;
-	dvec3 lookFrom = dvec3(0.0, 0.0, 0.0);
-	vec2 currentPixel = TexCoord*2.0 - 1.0;
-	dvec3 lookAt = dvec3(vec2_to_dvec2(currentPixel), -focal_length);
+{
+	float focal_length = 1.0;
+	vec2 currPixel  = TexCoord*2.0 - 1.0;
+	dvec3 lookFrom  = vec3_to_dvec3(vec3( 0.0, 0.0, 0.0));
+	dvec3 lookAt    = vec3_to_dvec3(vec3(currPixel, -focal_length));
+	ray  currentRay = generateRay(lookFrom, lookAt-lookFrom);
 
+	material M0 = createMaterial(MAT_DIELECTRIC, 1/1.5);
+	sphere S0   = createSphere(dvec3(0.0, 0.0,-2.0), 0.5, M0);
 
-	//uniform dvec3 sCenter;
+	dvec3 colour = dvec3(0.0);
+	dvec2 dir[9] = dvec2[9](
+		dvec2(1,0), dvec2(1,1), dvec2(0,1), dvec2(-1, 1), dvec2(0, 0),
+		dvec2(-1,0), dvec2(-1,-1), dvec2(0,-1), dvec2(1, -1)
+	);
 
+	//for(int i = 0; i < 2; i++){
+	//	ray r = generateRay(currentRay.origin, currentRay.direction + dvec3(dir[i], 0.0)/320.0);
+	//	colour += ray_colour(r, 2, S0);
+	//}
+	//colour /= 2.0;
+	colour = ray_colour(currentRay, 2, S0);
 
-	ray r = generateRay(lookFrom, lookAt-lookFrom);
-	sphere s = createSphere(dvec3(0.0, 0.0, -2.0), 1.0, createMaterial(MAT_LAMBERTIAN, dvec3(0.2, 0.1, 0.2)));
-    FragColor = vec4(dvec3_to_vec3(ray_colour(r, 10, s)), 1.0);
+	FragColor   = vec4(dvec3_to_vec3(colour), 1.0);
+	return;
 }
-
 
