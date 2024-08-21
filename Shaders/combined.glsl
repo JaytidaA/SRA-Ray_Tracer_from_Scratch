@@ -1,5 +1,5 @@
 # Shader Vertex
-# version 400 core
+# version 430 core
 layout (location = 0) in vec2 aPos;
 layout (location = 1) in vec2 aTexCoord;
 
@@ -13,7 +13,21 @@ void main()
 
 
 # Shader Fragment
-# version 400 core
+# version 430 core
+out vec4 FragColor;
+in vec2 TexCoord;
+
+uniform sampler2D uTexture;
+
+void main()
+{
+	FragColor = texture(uTexture, TexCoord);
+	return;
+}
+
+
+# Shader Compute 
+# version 430
 const double M_INFINITY = 1.0/0.0;
 const double M_PI       = 3.1415926535897932384626;
 
@@ -29,12 +43,28 @@ dvec2 vec2_to_dvec2(vec2 v2){
 	return dvec2(double(v2.x), double(v2.y));
 }
 
+ivec2 dvec2_to_ivec2(dvec2 dv2){
+	return ivec2(int(dv2.x), int(dv2.y));
+}
+
+dvec2 ivec2_to_dvec2(ivec2 iv2){
+	return dvec2(double(iv2.x), double(iv2.y));
+}
+
 vec3 dvec3_to_vec3(dvec3 dv3){
 	return vec3(float(dv3.x), float(dv3.y), float(dv3.z));
 }
 
 dvec3 vec3_to_dvec3(vec3 v3){
 	return dvec3(double(v3.x), double(v3.y), double(v3.z));
+}
+
+vec4 dvec4_to_vec4(dvec4 dv4){
+	return vec4(float(dv4.x), float(dv4.y), float(dv4.z), float(dv4.w));
+}
+
+dvec4 vec4_to_dvec4(vec4 v4){
+	return dvec4(double(v4.x), double(v4.y), double(v4.z), double(v4.w));
 }
 
 bool nearzero3(dvec3 dv3){
@@ -256,8 +286,8 @@ bool hitSphere(inout hit_record hr, sphere s, ray r, interval i){
 }
 
 
-out vec4 FragColor;
-in vec2 TexCoord;
+layout (local_size_x = 32, local_size_y = 32, local_size_z = 1)
+layout (rgba8, binding = 0) uniform image2D uTexture;
 
 dvec3 ray_colour(ray r, int depth, sphere s){
 	hit_record hr;
@@ -295,29 +325,19 @@ dvec3 ray_colour(ray r, int depth, sphere s){
 
 void main()
 {
-	float focal_length = 1.0;
-	vec2 currPixel  = TexCoord*2.0 - 1.0;
-	dvec3 lookFrom  = vec3_to_dvec3(vec3( 0.0, 0.0, 0.0));
-	dvec3 lookAt    = vec3_to_dvec3(vec3(currPixel, -focal_length));
-	ray  currentRay = generateRay(lookFrom, lookAt-lookFrom);
+	double focal_length = 1.0;
+	dvec3 lookFrom   = vec3_to_dvec3(vec3( 0.0, 0.0, 0.0));
+	ivec2 currPixel  = ivec2(gl_GlobalInvocationID.xy);
+	dvec3 lookAt     = dvec3(ivec2_to_dvec2(currPixel), -focal_length);
+	ray   currentRay = generateRay(lookFrom, lookAt-lookFrom);
 
-	material M0 = createMaterial(MAT_DIELECTRIC, 1/1.5);
+	material M0 = createMaterial(MAT_DIELECTRIC, 1.5);
+	material M1 = createMaterial(MAT_LAMBERTIAN, dvec3(1.0, 0.0, 0.0));
 	sphere S0   = createSphere(dvec3(0.0, 0.0,-2.0), 0.5, M0);
 
 	dvec3 colour = dvec3(0.0);
-	dvec2 dir[9] = dvec2[9](
-		dvec2(1,0), dvec2(1,1), dvec2(0,1), dvec2(-1, 1), dvec2(0, 0),
-		dvec2(-1,0), dvec2(-1,-1), dvec2(0,-1), dvec2(1, -1)
-	);
-
-	//for(int i = 0; i < 2; i++){
-	//	ray r = generateRay(currentRay.origin, currentRay.direction + dvec3(dir[i], 0.0)/320.0);
-	//	colour += ray_colour(r, 2, S0);
-	//}
-	//colour /= 2.0;
 	colour = ray_colour(currentRay, 2, S0);
 
-	FragColor   = vec4(dvec3_to_vec3(colour), 1.0);
-	return;
+	imageStore(uTexture, currPixel, vec4(dvec3_to_vec3(colour), 1.0));
 }
 

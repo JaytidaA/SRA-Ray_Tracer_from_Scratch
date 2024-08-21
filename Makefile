@@ -28,7 +28,7 @@ LIBFLAG2 := $(foreach fyle, $(LIBLIST2), -l$(fyle))
 
 # Shader Parts
 SHADERS_FRAGMENT_COMPONENTS := Utils.glsl Ray.glsl Interval.glsl Material.glsl HitRecord.glsl Scatter.glsl Sphere.glsl
-SHADERS_VF := Shaders/vertex.glsl Shaders/fragment.glsl
+SHADERS_VF := Shaders/vertex.glsl Shaders/fragment.glsl Shaders/compute.glsl
 SFD_DIRECTORY := $(foreach fyle, $(SHADERS_FRAGMENT_COMPONENTS), Shaders/Fragment\ Components/$(fyle))
 
 
@@ -38,4 +38,4 @@ application: application.cpp Shaders/combined.glsl
 
 Shaders/combined.glsl: concat_shaders.py $(SHADERS_VF) $(SFD_DIRECTORY)
 	python3 $<
-	rm Shaders/combined_fragment.glsl
+	rm Shaders/combined_compute.glsl
