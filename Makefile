@@ -27,7 +27,7 @@ LIBFLAG1 := $(foreach fyle, $(LIBLIST1), -l$(fyle))
 LIBFLAG2 := $(foreach fyle, $(LIBLIST2), -l$(fyle))
 
 # Shader Parts
-SHADERS_FRAGMENT_COMPONENTS := Utils.glsl Ray.glsl Interval.glsl Material.glsl HitRecord.glsl Scatter.glsl Sphere.glsl
+SHADERS_FRAGMENT_COMPONENTS := Utils.glsl Ray.glsl Interval.glsl Material.glsl HitRecord.glsl Scatter.glsl Sphere.glsl Cylinder.glsl World.glsl
 SHADERS_VF := Shaders/vertex.glsl Shaders/fragment.glsl Shaders/compute.glsl
 SFD_DIRECTORY := $(foreach fyle, $(SHADERS_FRAGMENT_COMPONENTS), Shaders/Fragment\ Components/$(fyle))
 

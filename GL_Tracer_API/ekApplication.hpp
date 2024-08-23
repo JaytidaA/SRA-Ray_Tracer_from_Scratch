@@ -20,6 +20,7 @@ class Application{
 	unsigned int my_VAO;
 	unsigned int my_Texture;
 	unsigned int my_Program;
+	unsigned int my_Compute;
 
 	float        * vertices;
 	unsigned int * indices ;
@@ -72,7 +73,7 @@ void Application::set_vertices_and_indices(float * vert, unsigned int * ind)
 	vertices = vert;
 	float aspect_ratio = (float)width / height;
 	for(int i = 0; i < 16; i++){
-		if(i%2==0){ vertices[i] *= aspect_ratio; }
+		if(i%4==0){ vertices[i] *= aspect_ratio; }
 	}
 	
 	// Setting OpenGL Context Parameters
@@ -101,12 +102,16 @@ void Application::set_texture_and_shader(const char * filepath)
 	ekGLCall(glGenTextures(1, &my_Texture));
 	ekGLCall(glBindTexture(texture_target, my_Texture));
 	ekGLCall(glTexImage2D(texture_target, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
-
+	ekGLCall(glTexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_REPEAT));
+	ekGLCall(glTexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_REPEAT));
+	ekGLCall(glTexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	ekGLCall(glTexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
 	// Shaders
 	shaders    = parse_file(filepath);
-	my_Program = create_shader(shaders.shaderVertexSource, shaders.shaderFragmentSource, shaders.shaderComputeSource);
-	ekGLCall(glUseProgram(my_Program));
+	my_Program = create_shader(shaders.shaderVertexSource, shaders.shaderFragmentSource);
+	my_Compute = create_compute_shader(shaders.shaderComputeSource);
+	ekGLCall(glUseProgram(my_Compute));
 }
 
 void Application::start_and_set_loop()
@@ -118,9 +123,9 @@ void Application::start_and_set_loop()
 	ekGLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));  // Set the background to black
 
 	// First Iteration of Compute Shader
-	ekGLCall(glUniform1i(glGetUniformLocation(my_Program, "uTexture"), 0));
 	ekGLCall(glBindImageTexture(0, my_Texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8));
-	ekGLCall(glDispatchCompute(std::ceil(width/32), std::ceil(height/32), 1));
+	ekGLCall(glUniform1i(glGetUniformLocation(my_Compute, "uTexture"), 0));
+	ekGLCall(glDispatchCompute(std::ceil(width/16), std::ceil(height/16), 1));
 	ekGLCall(glMemoryBarrier(GL_ALL_BARRIER_BITS));
 
 
@@ -139,11 +144,17 @@ void Application::start_and_set_loop()
 		glfwGetFramebufferSize(my_Window, winDim, winDim + 1);
 		ekGLCall(glViewport((winDim[0]-width)/2, (winDim[1]-height)/2, width, height));
 
+		// Compute Shader
+		ekGLCall(glBindTexture(texture_target, my_Texture));
+		ekGLCall(glUseProgram(my_Compute));
+		ekGLCall(glUniform1i(glGetUniformLocation(my_Compute, "uTexture"), 0));
+		ekGLCall(glDispatchCompute(std::ceil(width/16), std::ceil(height/16), 1));
+		ekGLCall(glMemoryBarrier(GL_ALL_BARRIER_BITS));
+
 		// Rebinding everything here
 		ekGLCall(glUseProgram(my_Program));
 		ekGLCall(glBindVertexArray(my_VAO));
 		ekGLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_IBO));
-		ekGLCall(glBindTexture(texture_target, my_Texture));
 		ekGLCall(glUniform1i(glGetUniformLocation(my_Program, "uTexture"), 0));
 
 
@@ -167,6 +178,8 @@ void Application::init(float * vertices, unsigned int * indices, const char * fi
 Application::~Application()
 {
 	ekGLCall(glDeleteProgram(my_Program));
+	ekGLCall(glDeleteProgram(my_Compute));
+	ekGLCall(glDeleteTextures(1, &my_Texture));
 	ekGLCall(glDeleteVertexArrays(1, &my_VAO));
 	ekGLCall(glDeleteBuffers(1, &my_VBO));
 	ekGLCall(glDeleteBuffers(1, &my_IBO));

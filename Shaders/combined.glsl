@@ -285,59 +285,143 @@ bool hitSphere(inout hit_record hr, sphere s, ray r, interval i){
 	return true;
 }
 
+struct roll{
+	dvec3 center, axis;
+	double radius, height;
+	material mat;
+};
 
-layout (local_size_x = 32, local_size_y = 32, local_size_z = 1)
-layout (rgba8, binding = 0) uniform image2D uTexture;
-
-dvec3 ray_colour(ray r, int depth, sphere s){
-	hit_record hr;
-	ray   scattered   = generateRay(dvec3(0.0), dvec3(0.0));
-	dvec3 attenuation = dvec3(0.0);
-	interval i        = createInterval(0.0001, M_INFINITY);
-	bool hit_sky      = false;
-	dvec3 retColour   = dvec3(1.0);
-
-	while(depth > 0){
-		if(hitSphere(hr, s, r, i)){
-			if(scatter(r, hr, attenuation, scattered)){
-				r = scattered;
-				retColour *= attenuation;
-				depth--;
-				continue;
-			}
-			break;
-		}
-		hit_sky = true;
-		break;
-	}
-
-	if(hit_sky){
-		dvec3 topColour    = dvec3(0.5, 0.7, 1.0);
-		dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
-		double t           = r.direction.y*0.5 + 0.5;
-		retColour         *= mix(topColour, bottomColour, t);
-	} else {
-		retColour = dvec3(0.0);
-	}
-
-	return retColour;
+roll createRoll(dvec3 center, dvec3 axis, double radius, double height, material mat){
+	roll R;
+	R.center = center;
+	R.axis = normalize(axis);
+	R.radius = radius;
+	R.height = height;
+	R.mat = mat;
+	return R;
 }
+
+bool hitRoll(inout hit_record hr, roll R, ray r, interval i){
+	dvec3 r_dir_proj = r.direction - (R.axis * dot(r.direction, R.axis));
+	dvec3 or_c_proj  = (r.origin - R.center) - (R.axis * dot(r.origin - R.center, R.axis));
+	
+	double a = dot(r_dir_proj, r_dir_proj);
+	double h = dot(r_dir_proj, -or_c_proj);
+	double c = dot(or_c_proj, or_c_proj) - R.radius*R.radius;
+	double discriminant = h*h - a*c;
+	if(discriminant < 0){ return false; }
+	double sqrtd = sqrt(discriminant);
+	double root  = (-h-sqrtd)/a;
+	if(!contains(i, root)){
+		root = (-h+sqrtd)/a;
+		if(!contains(i, root)){ return false; }
+	}
+
+	dvec3 hp = rayAtParameter(r, root);
+	double height_on_axis = dot(hp-R.center, R.axis);
+	if(height_on_axis <  R.height/2.0 || height_on_axis > R.height/2.0){ return false; }
+	dvec3 point_on_axis = R.center + (R.axis * height_on_axis);
+
+	hr.hitpoint = hp;
+	hr.lambda   = root;
+	hr.mat 		= R.mat;
+	determineOuterFace(hr, r, (hp - point_on_axis)/R.radius);
+	return true;
+}
+
+struct world{
+	int sphDefined;
+	sphere sphEl[10];
+	int cylDefined;
+	roll cylEl[10];
+};
+
+bool hitWorld(inout hit_record hr, world w, ray r, interval i){
+	hit_record temp;
+	bool hit_anything = false;
+
+	for(int j = 0; j < w.sphDefined; j++){
+		if(hitSphere(temp, w.sphEl[j], r, i))
+		{
+			hit_anything = true;
+			i.maxEl = hr.lambda;
+			hr = temp;
+		}
+	}
+
+	for(int j = 0; j < w.cylDefined; j++){
+		if(hitRoll(temp, w.cylEl[j], r, i))
+		{
+			hit_anything = true;
+			i.maxEl = hr.lambda;
+			hr = temp;
+		}
+	}
+	return hit_anything;
+}
+
+dvec3 ray_colour(ray r, int depth, world w){
+    hit_record hr;
+    ray   scattered   = generateRay(dvec3(0.0), dvec3(0.0));
+    dvec3 attenuation = dvec3(0.0);
+    interval i        = createInterval(0.0001, M_INFINITY);
+    bool hit_sky      = false;
+    dvec3 retColour   = dvec3(1.0);
+
+    while(depth > 0){
+        if(hitWorld(hr, w, r, i)){
+            if(scatter(r, hr, attenuation, scattered)){
+                r = scattered;
+                retColour *= attenuation;
+                depth--;
+                continue;
+            }
+            break;
+        }
+        hit_sky = true;
+        break;
+    }
+
+    if(hit_sky){
+        dvec3 topColour    = dvec3(0.5, 0.7, 1.0);
+        dvec3 bottomColour = dvec3(1.0, 1.0, 1.0);
+        double t           = r.direction.y*0.5 + 0.5;
+        retColour         *= mix(topColour, bottomColour, t);
+    } else {
+        retColour = dvec3(0.0);
+    }
+
+    return retColour;
+}
+
+
+
+layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+layout (rgba8, binding = 0) uniform image2D uTexture;
 
 void main()
 {
 	double focal_length = 1.0;
-	dvec3 lookFrom   = vec3_to_dvec3(vec3( 0.0, 0.0, 0.0));
-	ivec2 currPixel  = ivec2(gl_GlobalInvocationID.xy);
-	dvec3 lookAt     = dvec3(ivec2_to_dvec2(currPixel), -focal_length);
+	dvec3 lookFrom   = vec3_to_dvec3(vec3(0.0, 0.0, 0.0));
+	dvec2 TexCoords  = ivec2_to_dvec2(ivec2(gl_GlobalInvocationID.xy))/640.0;
+	dvec2 currPixel  = TexCoords * 2.0 - 1.0;
+	dvec3 lookAt     = dvec3(currPixel, -focal_length);
 	ray   currentRay = generateRay(lookFrom, lookAt-lookFrom);
 
-	material M0 = createMaterial(MAT_DIELECTRIC, 1.5);
+	material M0 = createMaterial(MAT_LAMBERTIAN, dvec3(0.5, 0.5, 0.0));
 	material M1 = createMaterial(MAT_LAMBERTIAN, dvec3(1.0, 0.0, 0.0));
-	sphere S0   = createSphere(dvec3(0.0, 0.0,-2.0), 0.5, M0);
+	material M2 = createMaterial(MAT_DIELECTRIC, 1.5);
+	material M3 = createMaterial(MAT_METAL, dvec3(0.7, 0.7, 0.7), 0.2);
+	world    W0;
+	W0.sphDefined = 0;
+	W0.cylDefined = 1;
+	W0.sphEl[0] = createSphere(dvec3( 0.0, -1000.5, -2.0), 1000.0, M0);
+	W0.sphEl[1] = createSphere(dvec3( 0.0,  0.0, -2.0), 0.5, M3);
+	W0.cylEl[0] = createRoll(dvec3(0.0, 0.0, -2.0), dvec3(0.0, 1.0, 0.0), 0.5, 1.0, M1);
 
 	dvec3 colour = dvec3(0.0);
-	colour = ray_colour(currentRay, 2, S0);
+	colour = ray_colour(currentRay, 20, W0);
 
-	imageStore(uTexture, currPixel, vec4(dvec3_to_vec3(colour), 1.0));
+	imageStore(uTexture, ivec2(gl_GlobalInvocationID.xy), vec4(dvec3_to_vec3(colour), 1.0));
 }
 

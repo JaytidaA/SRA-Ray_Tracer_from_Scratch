@@ -81,20 +81,29 @@ static unsigned int compile_shader(unsigned int type, const std::string& source)
 	return id;
 }
 
-static unsigned int create_shader(const std::string & vtx_Shader, const std::string & frg_Shader, const std::string & cmp_Shader){
+static unsigned int create_shader(const std::string & vtx_Shader, const std::string & frg_Shader){
 	ekGLCall(unsigned int program = glCreateProgram());
 	unsigned int vs = compile_shader(GL_VERTEX_SHADER, vtx_Shader);
 	unsigned int fs = compile_shader(GL_FRAGMENT_SHADER, frg_Shader);
-	unsigned int cs = compile_shader(GL_COMPUTE_SHADER, cmp_Shader);
 
 	ekGLCall(glAttachShader(program, vs));
 	ekGLCall(glAttachShader(program, fs));
-	ekGLCall(glAttachShader(program, cs));
 	ekGLCall(glLinkProgram(program));
 	ekGLCall(glValidateProgram(program));
 
 	ekGLCall(glDeleteShader(vs));
 	ekGLCall(glDeleteShader(fs));
+
+	return program;
+}
+
+static unsigned int create_compute_shader(const std::string & cmp_Shader){
+	ekGLCall(unsigned int program = glCreateProgram());
+	unsigned int cs = compile_shader(GL_COMPUTE_SHADER, cmp_Shader);
+	
+	ekGLCall(glAttachShader(program, cs));
+	ekGLCall(glLinkProgram(program));
+	ekGLCall(glValidateProgram(program));
 	ekGLCall(glDeleteShader(cs));
 
 	return program;
