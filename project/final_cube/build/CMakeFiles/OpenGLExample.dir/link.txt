@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/OpenGLExample.dir/home/rakshitha/Desktop/project/new.cpp.o -o OpenGLExample  /usr/lib/x86_64-linux-gnu/libGLEW.so -lglfw3 -ldl /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so 
