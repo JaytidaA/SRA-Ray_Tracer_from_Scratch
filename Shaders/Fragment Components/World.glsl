@@ -2,7 +2,7 @@ struct world{
 	int sphDefined;
 	sphere sphEl[10];
 	int cylDefined;
-	roll cylEl[10];
+	cylinder cylEl[10];
 };
 
 bool hitWorld(inout hit_record hr, world w, ray r, interval i){
@@ -18,14 +18,16 @@ bool hitWorld(inout hit_record hr, world w, ray r, interval i){
 		}
 	}
 
+	
 	for(int j = 0; j < w.cylDefined; j++){
-		if(hitRoll(temp, w.cylEl[j], r, i))
+		if(hitCylinder(temp, w.cylEl[j], r, i))
 		{
 			hit_anything = true;
 			i.maxEl = hr.lambda;
 			hr = temp;
 		}
 	}
+	
 	return hit_anything;
 }
 

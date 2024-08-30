@@ -125,7 +125,7 @@ void Application::start_and_set_loop()
 	// First Iteration of Compute Shader
 	ekGLCall(glBindImageTexture(0, my_Texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8));
 	ekGLCall(glUniform1i(glGetUniformLocation(my_Compute, "uTexture"), 0));
-	ekGLCall(glDispatchCompute(std::ceil(width/16), std::ceil(height/16), 1));
+	ekGLCall(glDispatchCompute(std::ceil(width/32), std::ceil(height/32), 1));
 	ekGLCall(glMemoryBarrier(GL_ALL_BARRIER_BITS));
 
 

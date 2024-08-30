@@ -34,6 +34,10 @@ SFD_DIRECTORY := $(foreach fyle, $(SHADERS_FRAGMENT_COMPONENTS), Shaders/Fragmen
 
 application: application.cpp Shaders/combined.glsl
 	$(CC) $(CCFLAGS) -o $@ $< $(INCFLAG) $(LINFLAG) $(LIBFLAG1) $(LIBFLAG2)
+	./$@ Shaders/combined.glsl
+
+prime-run: application.cpp Shaders/combined.glsl
+	$(CC) $(CCFLAGS) -o $@ $< $(INCFLAG) $(LINFLAG) $(LIBFLAG1) $(LIBFLAG2)
 	prime-run ./$@ Shaders/combined.glsl
 
 Shaders/combined.glsl: concat_shaders.py $(SHADERS_VF) $(SFD_DIRECTORY)

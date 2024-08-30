@@ -16,8 +16,8 @@ int main(int argc, char ** argv){
 	};
 
 	unsigned int indices[] = {
-    		0, 1, 2,
-    		2, 3, 0
+    	0, 1, 2,
+    	2, 3, 0
 	};
 
 	try{
@@ -28,7 +28,7 @@ int main(int argc, char ** argv){
 		std::cerr << "Error: " << e.what() << std::endl;
 		return -1;
 	}
-	// Toggle Comment for Makefile */
+	// Toggle Comment for Makefile 
 
 	return 0;
 }

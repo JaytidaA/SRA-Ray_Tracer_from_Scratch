@@ -285,6 +285,34 @@ bool hitSphere(inout hit_record hr, sphere s, ray r, interval i){
 	return true;
 }
 
+struct plane_disc{
+	dvec3 center, normal;
+	double radius;
+	material mat;
+};
+
+plane_disc createPlaneDisc(dvec3 center, dvec3 normal, double radius, material mat){
+	plane_disc pd;
+	pd.center = center;
+	pd.normal = normalize(normal);
+	pd.radius = radius;
+	pd.mat	  = mat;
+	return pd;
+}
+
+bool hitPlaneDisc(inout hit_record hr, plane_disc pd, ray r, interval i){
+	double lambda = dot(pd.center - r.origin, pd.normal)/dot(r.direction, pd.normal);
+	if(!contains(i, lambda)){ return false; }
+	dvec3 hp = rayAtParameter(r, lambda);
+	if(dot(hp-pd.center, hp-pd.center) > pd.radius * pd.radius){ return false; }
+
+	hr.hitpoint = hp;
+	hr.lambda 	= lambda;
+	hr.mat 		= pd.mat;
+	determineOuterFace(hr, r, pd.normal);
+	return true;
+}
+
 struct roll{
 	dvec3 center, axis;
 	double radius, height;
@@ -306,10 +334,11 @@ bool hitRoll(inout hit_record hr, roll R, ray r, interval i){
 	dvec3 or_c_proj  = (r.origin - R.center) - (R.axis * dot(r.origin - R.center, R.axis));
 	
 	double a = dot(r_dir_proj, r_dir_proj);
-	double h = dot(r_dir_proj, -or_c_proj);
-	double c = dot(or_c_proj, or_c_proj) - R.radius*R.radius;
+	double h = dot(r_dir_proj, or_c_proj);
+	double c = dot(or_c_proj, or_c_proj) - (R.radius * R.radius);
 	double discriminant = h*h - a*c;
-	if(discriminant < 0){ return false; }
+	if(discriminant < 0.0){ return false; }
+
 	double sqrtd = sqrt(discriminant);
 	double root  = (-h-sqrtd)/a;
 	if(!contains(i, root)){
@@ -319,7 +348,7 @@ bool hitRoll(inout hit_record hr, roll R, ray r, interval i){
 
 	dvec3 hp = rayAtParameter(r, root);
 	double height_on_axis = dot(hp-R.center, R.axis);
-	if(height_on_axis <  R.height/2.0 || height_on_axis > R.height/2.0){ return false; }
+	if(height_on_axis < -R.height/2.0 || height_on_axis > R.height/2.0){ return false; }
 	dvec3 point_on_axis = R.center + (R.axis * height_on_axis);
 
 	hr.hitpoint = hp;
@@ -329,11 +358,49 @@ bool hitRoll(inout hit_record hr, roll R, ray r, interval i){
 	return true;
 }
 
+struct cylinder{
+	roll my_roll;
+	plane_disc my_disc_1, my_disc_2;
+};
+
+cylinder createCylinder(dvec3 center, dvec3 axis, double radius, double height, material mat){
+	cylinder c;
+	c.my_roll	= createRoll(center, axis, radius, height, mat);
+	c.my_disc_1 = createPlaneDisc(center + (height/2.0)*normalize(axis),-axis, radius, mat);
+	c.my_disc_2 = createPlaneDisc(center - (height/2.0)*normalize(axis), axis, radius, mat);
+	return c;
+}
+
+bool hitCylinder(inout hit_record hr, cylinder c, ray r, interval i){
+	hit_record temp;
+	bool hit_anything = false;
+
+	if(hitRoll(temp, c.my_roll, r, i)){
+		hit_anything = true;
+		i.maxEl = hr.lambda;
+		hr = temp;
+	}
+
+	if(hitPlaneDisc(temp, c.my_disc_1, r, i)){
+		hit_anything = true;
+		i.maxEl = hr.lambda;
+		hr = temp;
+	}
+
+	if(hitPlaneDisc(temp, c.my_disc_2, r, i)){
+		hit_anything = true;
+		i.maxEl = hr.lambda;
+		hr = temp;
+	}
+
+	return hit_anything;
+}
+
 struct world{
 	int sphDefined;
 	sphere sphEl[10];
 	int cylDefined;
-	roll cylEl[10];
+	cylinder cylEl[10];
 };
 
 bool hitWorld(inout hit_record hr, world w, ray r, interval i){
@@ -349,14 +416,16 @@ bool hitWorld(inout hit_record hr, world w, ray r, interval i){
 		}
 	}
 
+	
 	for(int j = 0; j < w.cylDefined; j++){
-		if(hitRoll(temp, w.cylEl[j], r, i))
+		if(hitCylinder(temp, w.cylEl[j], r, i))
 		{
 			hit_anything = true;
 			i.maxEl = hr.lambda;
 			hr = temp;
 		}
 	}
+	
 	return hit_anything;
 }
 
@@ -396,14 +465,14 @@ dvec3 ray_colour(ray r, int depth, world w){
 
 
 
-layout (local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+layout (local_size_x = 32, local_size_y = 32, local_size_z = 1) in;
 layout (rgba8, binding = 0) uniform image2D uTexture;
 
 void main()
 {
 	double focal_length = 1.0;
 	dvec3 lookFrom   = vec3_to_dvec3(vec3(0.0, 0.0, 0.0));
-	dvec2 TexCoords  = ivec2_to_dvec2(ivec2(gl_GlobalInvocationID.xy))/640.0;
+	dvec2 TexCoords  = ivec2_to_dvec2(ivec2(gl_GlobalInvocationID.xy))/640;
 	dvec2 currPixel  = TexCoords * 2.0 - 1.0;
 	dvec3 lookAt     = dvec3(currPixel, -focal_length);
 	ray   currentRay = generateRay(lookFrom, lookAt-lookFrom);
@@ -413,11 +482,12 @@ void main()
 	material M2 = createMaterial(MAT_DIELECTRIC, 1.5);
 	material M3 = createMaterial(MAT_METAL, dvec3(0.7, 0.7, 0.7), 0.2);
 	world    W0;
-	W0.sphDefined = 0;
+	W0.sphDefined = 2;
 	W0.cylDefined = 1;
 	W0.sphEl[0] = createSphere(dvec3( 0.0, -1000.5, -2.0), 1000.0, M0);
-	W0.sphEl[1] = createSphere(dvec3( 0.0,  0.0, -2.0), 0.5, M3);
-	W0.cylEl[0] = createRoll(dvec3(0.0, 0.0, -2.0), dvec3(0.0, 1.0, 0.0), 0.5, 1.0, M1);
+	W0.sphEl[1] = createSphere(dvec3(0.0,  0.0, -2.0), 0.5, M1);
+	W0.sphEl[2] = createSphere(dvec3( 2.0,  0.0, -2.0), 0.5, M3);
+	W0.cylEl[0] = createCylinder(dvec3(-1.0, 0.0, -2.0), dvec3(0.0, 1.0, 0.5), 0.5, 1.0, M1);
 
 	dvec3 colour = dvec3(0.0);
 	colour = ray_colour(currentRay, 20, W0);
