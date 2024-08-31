@@ -16,7 +16,7 @@
 - [Acknowledgements](https://github.com/Ritika128/OpenGl-3d-GameEngine#acknowledgements)
 
 ## AIM OF THE PROJECT
-The aim of the project is to render different 3D shapes using GLSL and implementing GUI on them.
+The aim of the project is to create a simple Ray Tracing application from scratch.
 
 ## Clone and build the programs in the repository
 
@@ -25,14 +25,17 @@ The aim of the project is to render different 3D shapes using GLSL and implement
 Clone the repo:
 
 ```shell
-  git clone https://github.com/Ritika128/OpenGl-3d-GameEngine.git
+git clone https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch
 ```
 
-To run a specific program:
+To run the main application program just run the `Makefile` program:
 
 ```shell
-  g++ -o executable_name file_name.cpp -lGL -lglfw -DGL_GLEXT_PROTOTYPES -I./glm-master
-  ./executable_name
+make
+```
+
+If you have the `prime-run` program installed on you
+```shell
 ```
 
 Alternatively you may edit the CMakeLists.txt to change the executable and then run the cmake command, followed by the make command.
