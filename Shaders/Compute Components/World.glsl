@@ -3,12 +3,15 @@ struct world{
 	sphere sphEl[10];
 	int cylDefined;
 	cylinder cylEl[10];
+	int cubDefined;
+	cube cubEl[10];
 };
 
 bool hitWorld(inout hit_record hr, world w, ray r, interval i){
 	hit_record temp;
 	bool hit_anything = false;
 
+	// Check collision with sphere
 	for(int j = 0; j < w.sphDefined; j++){
 		if(hitSphere(temp, w.sphEl[j], r, i))
 		{
@@ -18,9 +21,19 @@ bool hitWorld(inout hit_record hr, world w, ray r, interval i){
 		}
 	}
 
-	
+	// Check collision with cylinder
 	for(int j = 0; j < w.cylDefined; j++){
 		if(hitCylinder(temp, w.cylEl[j], r, i))
+		{
+			hit_anything = true;
+			i.maxEl = hr.lambda;
+			hr = temp;
+		}
+	}
+
+	// Check collision with cube
+	for(int j = 0; j < w.cubDefined; j++){
+		if(hitCube(temp, w.cubEl[j], r, i))
 		{
 			hit_anything = true;
 			i.maxEl = hr.lambda;

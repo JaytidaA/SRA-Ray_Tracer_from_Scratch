@@ -1,11 +1,11 @@
 import os
 # Fragment Combine
-fragment_files = ["Utils.glsl", "Ray.glsl", "Interval.glsl", "Material.glsl", "HitRecord.glsl", "Scatter.glsl", "Sphere.glsl", "Cylinder.glsl", "World.glsl"]
+fragment_files = ["Utils.glsl", "Ray.glsl", "Interval.glsl", "Material.glsl", "HitRecord.glsl", "Scatter.glsl", "Sphere.glsl", "Cylinder.glsl", "Cube.glsl", "World.glsl"]
 output_file = "Shaders/combined.glsl"
 temp_file = "Shaders/combined_compute.glsl"
 
 for i in range(len(fragment_files)):
-	fragment_files[i] = "Shaders/Fragment Components/" + fragment_files[i]
+	fragment_files[i] = "Shaders/Compute Components/" + fragment_files[i]
 
 with open(temp_file, "w") as f:
 	pass

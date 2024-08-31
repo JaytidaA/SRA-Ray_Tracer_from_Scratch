@@ -15,12 +15,17 @@ void main()
 	material M2 = createMaterial(MAT_DIELECTRIC, 1.5);
 	material M3 = createMaterial(MAT_METAL, dvec3(0.7, 0.7, 0.7), 0.2);
 	world    W0;
-	W0.sphDefined = 2;
-	W0.cylDefined = 1;
+	W0.sphDefined = 1;
+	W0.cylDefined = 0;
+	W0.cubDefined = 2;
 	W0.sphEl[0] = createSphere(dvec3( 0.0, -1000.5, -2.0), 1000.0, M0);
-	W0.sphEl[1] = createSphere(dvec3(0.0,  0.0, -2.0), 0.5, M1);
-	W0.sphEl[2] = createSphere(dvec3( 2.0,  0.0, -2.0), 0.5, M3);
-	W0.cylEl[0] = createCylinder(dvec3(-1.0, 0.0, -2.0), dvec3(0.0, 1.0, 0.5), 0.5, 1.0, M1);
+	//W0.sphEl[1] = createSphere(dvec3(0.0,  0.0, -2.0), 0.5, M1);
+	//W0.sphEl[2] = createSphere(dvec3( 2.0,  0.0, -2.0), 0.5, M3);
+	//W0.cylEl[0] = createCylinder(dvec3(-1.0, 0.0, -2.0), dvec3(0.0, 1.0, 0.5), 0.5, 1.0, M1);
+	dvec3 some_rv = dvec3(1, 1, 1);
+	double some_db = sqrt(3)/2.0;
+	W0.cubEl[0] = createCube(dvec3( 1.0, 0.2, -2.0), some_db * normalize(some_rv), M3);
+	W0.cubEl[1] = createCube(dvec3(-1.0, 0.2, -2.0), some_db * normalize(some_rv), M1);
 
 	dvec3 colour = dvec3(0.0);
 	colour = ray_colour(currentRay, 20, W0);
