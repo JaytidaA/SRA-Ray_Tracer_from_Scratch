@@ -11,7 +11,7 @@
     
 - [Results](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#results)
     
-- [Contributors](https://github.com/Ritika128/OpenGl-3d-GameEngine#contributors)
+- [Contributors](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#contributors)
     
 - [Acknowledgements](https://github.com/Ritika128/OpenGl-3d-GameEngine#acknowledgements)
 
