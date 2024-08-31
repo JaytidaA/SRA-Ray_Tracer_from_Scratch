@@ -1,31 +1,88 @@
-# dev-Aaditya
-This branch contains the code of the development release of the Ray-Tracer from Scratch Project for Eklavya 2024.
+## Table of contents:
 
-## Directories
-### `GL\_Tracer\_API`
-This directory contains the header files containing some helpful functions for the RayTracer.
 
-### `Shaders`
-This directory contains the different Shaders to be loaded in for the final application.
+- [Aim of the project](https://github.com/Ritika128/OpenGl-3d-GameEngine#aim-of-the-project)
+    
+- [Clone and build the programs in the repository](https://github.com/Ritika128/OpenGl-3d-GameEngine#clone-and-build-the-programs-in-the-repository)
+    
+- [Programming Languages Used](https://github.com/Ritika128/OpenGl-3d-GameEngine#programming-languages-used)
+    
+- [Libraries Used](https://github.com/Ritika128/OpenGl-3d-GameEngine#libraries-used)
+    
+- [Results](https://github.com/Ritika128/OpenGl-3d-GameEngine#results)
+    
+- [Contributors](https://github.com/Ritika128/OpenGl-3d-GameEngine#contributors)
+    
+- [Acknowledgements](https://github.com/Ritika128/OpenGl-3d-GameEngine#acknowledgements)
 
-### `./`
-The main directory itself contains the following files:
-1. `application.cpp`: The main C++ file and the entry point of the program
-2. `application`: The executable binary
-3. `concat_shaders.py`: This file is used to concatenate the different glsl files present in `Shaders` into a larger combined Shader file. This is done because I like modularisation of my code components.
-4. `Makefile`: Contains the build directions.
-5. `README.md`: The README for this branch containing a brief overview of te files of this branch.
+## AIM OF THE PROJECT
+The aim of the project is to render different 3D shapes using GLSL and implementing GUI on them.
 
-(There also exists a hidden directory `RT-API`, currently there is no use for this.)
+## Clone and build the programs in the repository
 
-## Directions for Building
-After making the required changes to the `application.cpp` file or the shaders, you can simply execute the Makefile and the application will open.
-```bash
-make
+[](https://github.com/Ritika128/OpenGl-3d-GameEngine#clone-and-build-the-programs-in-the-repository)
+
+Clone the repo:
+
+```shell
+  git clone https://github.com/Ritika128/OpenGl-3d-GameEngine.git
 ```
 
-If you want to reopen the application after the build once again you have to use the command:
-```bash
-./application Shaders/combined.glsl
+To run a specific program:
+
+```shell
+  g++ -o executable_name file_name.cpp -lGL -lglfw -DGL_GLEXT_PROTOTYPES -I./glm-master
+  ./executable_name
 ```
-if you do not want to build the project again.
+
+Alternatively you may edit the CMakeLists.txt to change the executable and then run the cmake command, followed by the make command.
+
+## Programming Languages Used
+
+[](https://github.com/Ritika128/OpenGl-3d-GameEngine#programming-languages-used)
+
+- C++
+- GLSL
+
+## Libraries Used
+
+[](https://github.com/Ritika128/OpenGl-3d-GameEngine#libraries-used)
+
+
+- GLFW- Graphics Library Framework (GLFW) allows users to create and manage OpenGL windows, while handling keyboard, mouse and joystick inputs. GLFW and FreeGLUT are alternatives to the same functions.
+- GLEW- GLEW (OpenGL Extension Wrangler Library) is a cross-platform C/C++ extension loading library that provides an effcient mechanism to determine which extensions are supported on the platform.
+- GLM- GLM is a C++ mathematics library for graphics software based on the OpenGL Shading Library(GLSL) specification. We used the GLM library to provide animations to the shapes we rendered using Modern OpenGL. GLM library provides us with matrices and vectors which can be passed to the draw call, and refresh the indices of the shapes rendered, resulting in motion.
+- IMGUI- Immediate Mode Graphical User Interface is a popular library used primarily in C++ for creating graphical user interfaces (GUIs) in applications. It's particularly popular in game development, tools, and applications where performance and ease of use are critical.
+
+## Results
+
+Rendering spheres of different materials
+![[Pasted image 20240831165509.png]]![[Pasted image 20240831165613.png]]\
+Rendering a cylinder
+![[Pasted image 20240831171036.png]]
+
+
+Rendering cubes
+![[Pasted image 20240831165752.png]]
+
+![[Pasted image 20240831165939.png]]
+
+Implementing GUI on the cylinder
+![[Screencast from 08-31-2024 09_04_02 PM.webm]]
+
+## Contributors
+
+[](https://github.com/Ritika128/OpenGl-3d-GameEngine?tab=readme-ov-file#contributors)
+
+- [Rudrakshi Kubde](https://github.com/RudrakshiKubde)
+- [Rakshitha Kowlikar](https://github.com/RakshithaKowlikar)
+-  [Aaditya Joil](https://github.com/JaytidaA)
+
+## Acknowledgements
+
+[](https://github.com/Ritika128/OpenGl-3d-GameEngine?tab=readme-ov-file#acknowledgements)
+
+- [SRA VJTI](https://sravjti.in/) Eklavya 2023.
+- [Documention for OpenGL functions](https://www.overleaf.com/project/66d1cdc320273d5549621245).
+- [Referred this to implement OpenGL functions and use GLM](https://learnopengl.com/).
+- Special thanks to our mentors Anish Mahadevan for guiding us through the Eklavya program.
