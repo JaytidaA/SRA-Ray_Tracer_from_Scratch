@@ -3,7 +3,7 @@
 
 - [Aim of the project](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#aim-of-the-project)
     
-- [Clone and build the programs in the repository](https://github.com/Ritika128/OpenGl-3d-GameEngine#clone-and-build-the-programs-in-the-repository)
+- [Clone and build the programs in the repository](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#clone-and-build-the-programs-in-the-repository)
     
 - [Programming Languages Used](https://github.com/Ritika128/OpenGl-3d-GameEngine#programming-languages-used)
     
