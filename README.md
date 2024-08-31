@@ -13,7 +13,7 @@
     
 - [Contributors](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#contributors)
     
-- [Acknowledgements](https://github.com/Ritika128/OpenGl-3d-GameEngine#acknowledgements)
+- [Acknowledgements](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#acknowledgements)
 
 ## AIM OF THE PROJECT
 The aim of the project is to create a simple Ray Tracing application from scratch.
