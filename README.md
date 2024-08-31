@@ -15,41 +15,35 @@
     
 - [Acknowledgements](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#acknowledgements)
 
-## AIM OF THE PROJECT
+## Aim OF THE PROJECT
 The aim of the project is to create a simple Ray Tracing application from scratch.
 
 ## Clone and build the programs in the repository
-
-[](https://github.com/Ritika128/OpenGl-3d-GameEngine#clone-and-build-the-programs-in-the-repository)
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#clone-and-build-the-programs-in-the-repository)
 
 Clone the repo:
-
 ```shell
 git clone https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch
 ```
 
 To run the main application program just run the `Makefile` program:
-
 ```shell
 make
 ```
 
-If you have the `prime-run` program installed on you
+If you have the `prime-run` program installed on your system and an NVIDIA graphics card then run the following program:
 ```shell
+make prime-run
 ```
 
-Alternatively you may edit the CMakeLists.txt to change the executable and then run the cmake command, followed by the make command.
-
 ## Programming Languages Used
-
-[](https://github.com/Ritika128/OpenGl-3d-GameEngine#programming-languages-used)
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#programming-languages-used)
 
 - C++
 - GLSL
 
 ## Libraries Used
-
-[](https://github.com/Ritika128/OpenGl-3d-GameEngine#libraries-used)
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#libraries-used)
 
 
 - GLFW- Graphics Library Framework (GLFW) allows users to create and manage OpenGL windows, while handling keyboard, mouse and joystick inputs. GLFW and FreeGLUT are alternatives to the same functions.
@@ -60,32 +54,40 @@ Alternatively you may edit the CMakeLists.txt to change the executable and then 
 ## Results
 
 Rendering spheres of different materials
-![[Pasted image 20240831165509.png]]![[Pasted image 20240831165613.png]]\
-Rendering a cylinder
-![[Pasted image 20240831171036.png]]
+![sphere_lambertian](./Images/SphereL_OpenGL.webp)
+![sphere_dielectric](./Images/SphereG_OpenGL.webp)
+![sphere_metal](./Images/SphereM_OpenGL.webp)
 
+Rendering a cylinder
+![cylinder](./Images/Cylinder_OpenGL.webm)
 
 Rendering cubes
-![[Pasted image 20240831165752.png]]
+![cube](./Images/Cube_RT.webp)
 
-![[Pasted image 20240831165939.png]]
+![cubes](./Images/Cube_OpenGL.webp)
 
 Implementing GUI on the cylinder
-![[Screencast from 08-31-2024 09_04_02 PM.webm]]
+![cylinder_moving](./Images/Cylinder_GUI.webm)
 
 ## Contributors
-
-[](https://github.com/Ritika128/OpenGl-3d-GameEngine?tab=readme-ov-file#contributors)
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#contributors)
 
 - [Rudrakshi Kubde](https://github.com/RudrakshiKubde)
 - [Rakshitha Kowlikar](https://github.com/RakshithaKowlikar)
--  [Aaditya Joil](https://github.com/JaytidaA)
+- [Aaditya Joil](https://github.com/JaytidaA)
 
-## Acknowledgements
+# Resources
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#resources)
 
-[](https://github.com/Ritika128/OpenGl-3d-GameEngine?tab=readme-ov-file#acknowledgements)
+- [SRA VJTI](https://sravjti.in).
+- [Documentation for OpenGL](https://docs.gl)
+- [Project Report](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/Project_Report.pdf).
+- [The Cherno's OpenGL Tutorial](https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2)
+- [Referred this to implement OpenGL functions and use GLM](https://learnopengl.com)
+- [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
-- [SRA VJTI](https://sravjti.in/) Eklavya 2023.
-- [Documention for OpenGL functions](https://www.overleaf.com/project/66d1cdc320273d5549621245).
-- [Referred this to implement OpenGL functions and use GLM](https://learnopengl.com/).
+# Acknowledgements
+[](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#acknowledgements)
+
 - Special thanks to our mentors Anish Mahadevan for guiding us through the Eklavya program.
+- Special thanks to Yan Chernikov, Joey de Vries and Peter Shirley as well for their amazing projects which help made this one easier.
