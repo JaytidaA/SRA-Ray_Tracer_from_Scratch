@@ -7,7 +7,7 @@
     
 - [Programming Languages Used](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#programming-languages-used)
     
-- [Libraries Used](https://github.com/Ritika128/OpenGl-3d-GameEngine#libraries-used)
+- [Libraries Used](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch/blob/main/README.md#libraries-used)
     
 - [Results](https://github.com/Ritika128/OpenGl-3d-GameEngine#results)
     
