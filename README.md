@@ -1,7 +1,7 @@
 ## Table of contents:
 
 
-- [Aim of the project](https://github.com/Ritika128/OpenGl-3d-GameEngine#aim-of-the-project)
+- [Aim of the project](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#aim-of-the-project)
     
 - [Clone and build the programs in the repository](https://github.com/Ritika128/OpenGl-3d-GameEngine#clone-and-build-the-programs-in-the-repository)
     
