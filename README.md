@@ -61,7 +61,7 @@ Rendering spheres of different materials:
 </div></center>
 
 Rendering a cylinder:
-<img src="./Images/Cylinder_OpenGL.webp" alt="Cylinder_OpenGL">
+<img src="./Images/Cylinder_OpenGL.webm" alt="Cylinder_OpenGL" style="height: 300px;">
 
 Rendering cubes:
 <center><div style="display: flex; justify-content: space-between;">
