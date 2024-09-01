@@ -54,10 +54,10 @@ make prime-run
 ## Results
 
 Rendering spheres of different materials:
-<div style="display: flex; justify-content: space-beteen;">
-<span style="width:200px;">![sphere_lambertian](./Images/SphereL_OpenGL.webp)</span>
-<span style="width:200px;">![sphere_dielectric](./Images/SphereG_OpenGL.webp)</span>
-<span style="width:200px;">![sphere_metal](./Images/SphereM_OpenGL.webp)</span>
+<div style="display: flex; justify-content: space-between;">
+<img src="./Images/SphereL_OpenGL.webp" alt="Lambertian Sphere" style="width: 200px;">
+<img src="./Images/SphereG_OpenGL.webp" alt="Glass Sphere" style="width: 200px;">
+<img src="./Images/SphereM_OpenGL.webp" alt="Metallic Sphere" style="width: 200px;">
 </div>
 
 Rendering a cylinder
