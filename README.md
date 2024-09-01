@@ -61,6 +61,7 @@ Rendering spheres of different materials:
 </div></center>
 
 Rendering a cylinder:
+
 <img src="./Images/Cylinder_OpenGL.webm" alt="Cylinder_OpenGL" style="height: 300px;">
 
 Rendering cubes:
@@ -68,8 +69,10 @@ Rendering cubes:
 <img src="./Images/Cube_RT.webp" alt="Cube" style="width: 340px;">
 <img src="./Images/Cube_OpenGL.webp" alt="Metallic and Lambertian Cubes" style="width: 340px;">
 </div></center>
-Implementing GUI on the cylinder
-![cylinder_moving](./Images/Cylinder_GUI.webm)
+
+Implementing GUI on the cylinder:
+
+![Cylinder_GUI.webm](https://github.com/user-attachments/assets/7e8ee0f1-109f-41f9-ba8c-4c7ed2925777)
 
 ## Contributors
 [](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch?tab=readme-ov-file#contributors)
