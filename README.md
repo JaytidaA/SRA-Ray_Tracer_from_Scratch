@@ -54,20 +54,20 @@ make prime-run
 ## Results
 
 Rendering spheres of different materials:
-<div style="display: flex; justify-content: space-between;">
-<img src="./Images/SphereL_OpenGL.webp" alt="Lambertian Sphere" style="width: 200px;">
-<img src="./Images/SphereG_OpenGL.webp" alt="Glass Sphere" style="width: 200px;">
-<img src="./Images/SphereM_OpenGL.webp" alt="Metallic Sphere" style="width: 200px;">
-</div>
+<center><div style="width: 100vw; display: flex; justify-content: space-between;">
+<img src="./Images/SphereL_OpenGL.webp" alt="Lambertian Sphere" style="flex: 1 1 220px;">
+<img src="./Images/SphereG_OpenGL.webp" alt="Glass Sphere" style="flex: 1 1 220px;">
+<img src="./Images/SphereM_OpenGL.webp" alt="Metallic Sphere" style="flex: 1 1 220px;">
+</div></center>
 
-Rendering a cylinder
-![cylinder](./Images/Cylinder_OpenGL.webm)
+Rendering a cylinder:
+<img src="./Images/Cube_OpenGL.webp" alt="Cylinder_OpenGL">
 
-Rendering cubes
-![cube](./Images/Cube_RT.webp)
-
-![cubes](./Images/Cube_OpenGL.webp)
-
+Rendering cubes:
+<center><div style="width: 100vw; display: flex; justify-content: space-between;">
+<img src="./Images/Cube_RT.webp" alt="Cube" style="flex: 1 1 340px;">
+<img src="./Images/Cube_OpenGL.webp" alt="Metallic and Lambertian Cubes" style="flex: 1 1 340px;">
+</div></center>
 Implementing GUI on the cylinder
 ![cylinder_moving](./Images/Cylinder_GUI.webm)
 
