@@ -94,5 +94,5 @@ Implementing GUI on the cylinder:
 # Acknowledgements
 [](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#acknowledgements)
 
-- Special thanks to our mentors Anish Mahadevan for guiding us through the Eklavya program.
+- Special thanks to our mentors [Anish Mahadevan](https://github.com/Faulty404) for guiding us through the Eklavya program.
 - Special thanks to Yan Chernikov, Joey de Vries and Peter Shirley as well for their amazing projects which help made this one easier.
