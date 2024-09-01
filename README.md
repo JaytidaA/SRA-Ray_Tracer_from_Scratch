@@ -46,17 +46,19 @@ make prime-run
 [](https://github.com/JaytidaA/SRA-Ray_Tracer_from_Scratch#libraries-used)
 
 
-- GLFW- Graphics Library Framework (GLFW) allows users to create and manage OpenGL windows, while handling keyboard, mouse and joystick inputs. GLFW and FreeGLUT are alternatives to the same functions.
-- GLEW- GLEW (OpenGL Extension Wrangler Library) is a cross-platform C/C++ extension loading library that provides an effcient mechanism to determine which extensions are supported on the platform.
-- GLM- GLM is a C++ mathematics library for graphics software based on the OpenGL Shading Library(GLSL) specification. We used the GLM library to provide animations to the shapes we rendered using Modern OpenGL. GLM library provides us with matrices and vectors which can be passed to the draw call, and refresh the indices of the shapes rendered, resulting in motion.
-- IMGUI- Immediate Mode Graphical User Interface is a popular library used primarily in C++ for creating graphical user interfaces (GUIs) in applications. It's particularly popular in game development, tools, and applications where performance and ease of use are critical.
+- GLFW  - Graphics Library Framework (GLFW) allows users to create and manage OpenGL windows, while handling keyboard, mouse and joystick inputs. GLFW and FreeGLUT are alternatives to the same functions.
+- GLEW  - GLEW (OpenGL Extension Wrangler Library) is a cross-platform C/C++ extension loading library that provides an effcient mechanism to determine which extensions are supported on the platform.
+- GLM   - GLM is a C++ mathematics library for graphics software based on the OpenGL Shading Library(GLSL) specification. We used the GLM library to provide animations to the shapes we rendered using Modern OpenGL. GLM library provides us with matrices and vectors which can be passed to the draw call, and refresh the indices of the shapes rendered, resulting in motion.
+- IMGUI - Immediate Mode Graphical User Interface is a popular library used primarily in C++ for creating graphical user interfaces (GUIs) in applications. It's particularly popular in game development, tools, and applications where performance and ease of use are critical.
 
 ## Results
 
-Rendering spheres of different materials
-![sphere_lambertian](./Images/SphereL_OpenGL.webp)
-![sphere_dielectric](./Images/SphereG_OpenGL.webp)
-![sphere_metal](./Images/SphereM_OpenGL.webp)
+Rendering spheres of different materials:
+<div style="display: flex; justify-content: space-beteen;">
+<span style="width:200px;">![sphere_lambertian](./Images/SphereL_OpenGL.webp)</span>
+<span style="width:200px;">![sphere_dielectric](./Images/SphereG_OpenGL.webp)</span>
+<span style="width:200px;">![sphere_metal](./Images/SphereM_OpenGL.webp)</span>
+</div>
 
 Rendering a cylinder
 ![cylinder](./Images/Cylinder_OpenGL.webm)
