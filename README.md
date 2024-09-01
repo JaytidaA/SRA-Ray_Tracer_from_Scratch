@@ -54,19 +54,19 @@ make prime-run
 ## Results
 
 Rendering spheres of different materials:
-<center><div style="width: 100vw; display: flex; justify-content: space-between;">
-<img src="./Images/SphereL_OpenGL.webp" alt="Lambertian Sphere" style="flex: 1 1 220px;">
-<img src="./Images/SphereG_OpenGL.webp" alt="Glass Sphere" style="flex: 1 1 220px;">
-<img src="./Images/SphereM_OpenGL.webp" alt="Metallic Sphere" style="flex: 1 1 220px;">
+<center><div style="display: flex; justify-content: space-between;">
+<img src="./Images/SphereL_OpenGL.webp" alt="Lambertian Sphere" style="width: 220px;">
+<img src="./Images/SphereG_OpenGL.webp" alt="Glass Sphere" style="width: 220px;">
+<img src="./Images/SphereM_OpenGL.webp" alt="Metallic Sphere" style="width: 220px;">
 </div></center>
 
 Rendering a cylinder:
-<img src="./Images/Cube_OpenGL.webp" alt="Cylinder_OpenGL">
+<img src="./Images/Cylinder_OpenGL.webp" alt="Cylinder_OpenGL">
 
 Rendering cubes:
-<center><div style="width: 100vw; display: flex; justify-content: space-between;">
-<img src="./Images/Cube_RT.webp" alt="Cube" style="flex: 1 1 340px;">
-<img src="./Images/Cube_OpenGL.webp" alt="Metallic and Lambertian Cubes" style="flex: 1 1 340px;">
+<center><div style="display: flex; justify-content: space-between;">
+<img src="./Images/Cube_RT.webp" alt="Cube" style="width: 340px;">
+<img src="./Images/Cube_OpenGL.webp" alt="Metallic and Lambertian Cubes" style="width: 340px;">
 </div></center>
 Implementing GUI on the cylinder
 ![cylinder_moving](./Images/Cylinder_GUI.webm)
