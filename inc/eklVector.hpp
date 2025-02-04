@@ -3,6 +3,7 @@
 
 namespace ekl{
 
+#pragma pack(push, 1)
 class vector{
 private:
 	float x, y, z, w;
@@ -22,11 +23,14 @@ public:
 	friend vector operator / (const vector &, const float);
 
 public:
-	float norm();
-	float norm3();
-	float norm3squared();
+	float e_norm() const;
+	float e_norm3() const;
+	float e_norm3squared() const;
+
+	const float * data() const;
 
 };
+#pragma pack(pop)
 
 };
 
